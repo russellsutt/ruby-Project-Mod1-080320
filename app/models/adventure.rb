@@ -1,0 +1,1 @@
+class Adventure < ActiveRecord::Base
