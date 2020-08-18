@@ -6,7 +6,7 @@ House.destroy_all
 
     array = []
     url = "https://anapioficeandfire.com/api/houses"
-    url + "?page=1"
+    #url + "?page=1"
     response = RestClient.get(url)
     data = JSON.parse(response)
     #test
@@ -14,9 +14,9 @@ House.destroy_all
         array << data
     end
     current_pg = 2
-    while pg_num < 47
-        url += "?page=#{current_pg}"
-        response = RestClient.get(url)
+    while current_pg < 47
+        new_url = url + "?page=#{current_pg}"
+        response = RestClient.get(new_url)
         #while response.success?
             data = JSON.parse(response)
             #test
