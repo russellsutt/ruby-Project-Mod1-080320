@@ -3,46 +3,35 @@ require 'json'
 require 'pry'
 
 House.destroy_all
+Room.destroy_all
+Adventure.destroy_all
 
-    array = []
+#Below is API request for the four houses / House.third is Stark
     url = "https://anapioficeandfire.com/api/houses"
-    #url + "?page=1"
     response = RestClient.get(url)
     data = JSON.parse(response)
-    #test
-    data.each do |data|
-        array << data
-    end
-    current_pg = 2
+    current_pg = 1
     while current_pg < 47
         new_url = url + "?page=#{current_pg}"
         response = RestClient.get(new_url)
-        #while response.success?
-            data = JSON.parse(response)
-            #test
-            data.each do |d|
-                array << d
+        data = JSON.parse(response)
+        data.each do |d|
+            if d["name"] == "House Stark of Winterfell" || d["name"] == "House Lannister of Casterly Rock" || d["name"] == "House Targaryen of King's Landing" || d["name"] == "House Nymeros Martell of Sunspear"
+                house = House.create(name: d["name"], region: d["region"], coat_of_arms: d["coatOfArms"], words: d["words"], founded: d["founded"], died_out: d["diedOut"])                           
             end
-        #end
+        end
         current_pg += 1
     end
     
+    #Creates room that belongs to Stark house
+    room = Room.create(name: "bedroom", house: House.third)
+
+
+    #Creates adventure for Stark house
+    adventure = Adventure.create(name: "adventure", house: House.third)
+
     binding.pry
-
-    puts "test"
+    puts "for pry"
  
-# houses_response = RestClient.get("https://anapioficeandfire.com/api/houses?pageSize=50")
-# houses_data = JSON.parse(houses_response)
 
-# houses_data.each do |h|
-#     house = House.new()
-#     house.name = h["name"]
-#     house.region = h["region"]
-#     house.coat_of_arms = h["coatOfArms"]
-#     house.words = h["words"]
-#     house.founded = h["founded"]
-#     house.died_out = h["diedOut"]
-#     #binding.pry
-#     house.save
-# end
 
