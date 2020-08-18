@@ -6,6 +6,28 @@ House.destroy_all
 Room.destroy_all
 Adventure.destroy_all
 Item.destroy_all
+Character.destroy_all
+Library.destroy_all
+User.destroy_all
+
+arya = GameOfThronesApi.find_character('Arya Stark')
+sansa = GameOfThronesApi.find_character('Sansa Stark')
+ned = GameOfThronesApi.find_character('Eddard Stark')
+robb = GameOfThronesApi.find_character('Robb Stark')
+jon = GameOfThronesApi.find_character('Jon Snow')
+
+def character_data(character)
+    character.each { |character| Character.create(name: character["name"], titles: character["titles"]) }
+end
+
+arya_data = character_data(arya)
+sansa_data = character_data(sansa)
+ned_data = character_data(ned)
+robb_data = character_data(robb)
+jon_data = character_data(jon)
+
+library = Library.new(name: "The Winterfell Library")
+skills = Skill.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
 
 #Creates house data
 stark = GameOfThronesApi.find_house("stark")
@@ -41,7 +63,7 @@ itemthree = Item.create(name: "gold dragons", adventure: Adventure.first)
     
 #binding.pry
 
-#
+puts "for pry"
  
 
 
