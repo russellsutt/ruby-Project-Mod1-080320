@@ -1,32 +1,30 @@
 require 'rest-client'
 require 'json'
 require 'pry'
-require 'game_of_thrones_api'
 
 House.destroy_all
 Room.destroy_all
 Adventure.destroy_all
 Item.destroy_all
 
+#method to add data to house table
+def house_data(house)
+    house.each do |data|
+        House.create(name: data["name"], region: data["region"], coat_of_arms: data["coatOfArms"], words: data["words"], founded: data["founded"], died_out: data["diedOut"])
+    end
+end
 
+#Creates house data
 stark = GameOfThronesApi.find_house("stark")
 targaryen = GameOfThronesApi.find_house("targaryen")
 lannister = GameOfThronesApi.find_house("House Lannister of Casterly Rock")
 martel = GameOfThronesApi.find_house("martel")
 
-stark.each do |house|
-    stark_house = House.create(name: house["name"], region: house["region"], coat_of_arms: house["coatOfArms"], words: house["words"], founded: house["founded"], died_out: house["diedOut"])
-end
-targaryen.each do |house|
-    targaryen_house = House.create(name: house["name"], region: house["region"], coat_of_arms: house["coatOfArms"], words: house["words"], founded: house["founded"], died_out: house["diedOut"])
-end
-lannister.each do |house|
-    lannister_house = House.create(name: house["name"], region: house["region"], coat_of_arms: house["coatOfArms"], words: house["words"], founded: house["founded"], died_out: house["diedOut"])
-end
-martel.each do |house|
-    martel_house = House.create(name: house["name"], region: house["region"], coat_of_arms: house["coatOfArms"], words: house["words"], founded: house["founded"], died_out: house["diedOut"])
-end
-
+#Creates houses in table using house_data method
+stark_house = house_data(stark)
+targaryen_house = house_data(targaryen)
+lannister_house = house_data(lannister)
+martel_house = house_data(martel)
     
 #Creates room that belongs to Stark house
 room = Room.create(name: "bed chamber", house: House.first)
