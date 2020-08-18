@@ -85,11 +85,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-<<<<<<< HEAD
-  game_of_thrones_api (~> 0.4.0)
-=======
   game_of_thrones_api
->>>>>>> e488789c85a5320cc2a357833eb4ca7a390b00e8
   pry
   rake
   require_all

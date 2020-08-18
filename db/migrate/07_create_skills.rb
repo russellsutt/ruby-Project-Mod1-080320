@@ -5,7 +5,7 @@ class CreateSkills < ActiveRecord::Migration[6.0]
             t.integer :archery
             t.integer :horde_riding
             t.integer :survival_skills
-            t.integer :Fatigue
+            t.integer :fatigue
         end
     end
 end

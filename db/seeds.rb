@@ -41,7 +41,7 @@ itemthree = Item.create(name: "gold dragons", adventure: Adventure.first)
     
 #binding.pry
 
-puts "for pry"
+#
  
 
 
