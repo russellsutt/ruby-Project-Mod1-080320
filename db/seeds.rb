@@ -9,6 +9,7 @@ Item.destroy_all
 Character.destroy_all
 Library.destroy_all
 User.destroy_all
+UserHouse.destroy_all
 
 arya = GameOfThronesApi.find_character('Arya Stark')
 sansa = GameOfThronesApi.find_character('Sansa Stark')
@@ -48,6 +49,11 @@ targaryen_house = house_data(targaryen)
 lannister_house = house_data(lannister)
 martel_house = house_data(martel)
     
+#Creates test user
+russ = User.create(name: "russ", password: "1234", gender: "male")
+
+#userhouse = UserHouse.create(user: russ, house: House.first)
+
 #Creates room that belongs to Stark house
 room = Room.create(name: "bed chamber", house: House.first)
 
@@ -60,10 +66,9 @@ itemone = Item.create(name: "sword", adventure: Adventure.first)
 itemtwo = Item.create(name: "direwolf", adventure: Adventure.first)
 itemthree = Item.create(name: "gold dragons", adventure: Adventure.first)
 
-    
-#binding.pry
 
-puts "for pry"
+
+
  
 
 
