@@ -8,6 +8,12 @@ class CLI
 
     def start
         puts "Welcome to Game of Thrones CLI!"
+
+        Adventure.start
+
+        binding.pry
+
+
         user = User.login
         User.start_game
 
@@ -20,7 +26,7 @@ class CLI
         end
         #need to have if/elis/else if they pick another house
         if house_selection == 1
-            UserHouse.create(user: user, house: House.first)
+            UserHouse.create(user: user, house: House.find_by(name: "House Stark of Winterfell"))
         end
     
         

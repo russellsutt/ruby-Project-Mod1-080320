@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
         prompt = TTY::Prompt.new
         prompt.select("Please pick an option?") do |menu|
             menu.choice name: "Start a new Game", value: 1
-            menu.choice name: "Continue Game", value: 1
-            menu.choice name: "Quit", value: 1
+            menu.choice name: "Continue Game", value: 2
+            menu.choice name: "Quit", value: 3
         end
     end
 
