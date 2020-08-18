@@ -7,18 +7,18 @@ Room.destroy_all
 Adventure.destroy_all
 Item.destroy_all
 
+#Creates house data
+stark = GameOfThronesApi.find_house("stark")
+targaryen = GameOfThronesApi.find_house("targaryen")
+lannister = GameOfThronesApi.find_house("House Lannister of Casterly Rock")
+martel = GameOfThronesApi.find_house("martel")
+
 #method to add data to house table
 def house_data(house)
     house.each do |data|
         House.create(name: data["name"], region: data["region"], coat_of_arms: data["coatOfArms"], words: data["words"], founded: data["founded"], died_out: data["diedOut"])
     end
 end
-
-#Creates house data
-stark = GameOfThronesApi.find_house("stark")
-targaryen = GameOfThronesApi.find_house("targaryen")
-lannister = GameOfThronesApi.find_house("House Lannister of Casterly Rock")
-martel = GameOfThronesApi.find_house("martel")
 
 #Creates houses in table using house_data method
 stark_house = house_data(stark)
@@ -39,7 +39,7 @@ itemtwo = Item.create(name: "direwolf", adventure: Adventure.first)
 itemthree = Item.create(name: "gold dragons", adventure: Adventure.first)
 
     
-binding.pry
+#binding.pry
 
 puts "for pry"
  
