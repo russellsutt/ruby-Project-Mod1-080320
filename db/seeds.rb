@@ -46,9 +46,3 @@ House.destroy_all
 #     house.save
 # end
 
-
-
-
-# # houses_data.collect do |house|
-# #         house # house["name"]
-# # end
