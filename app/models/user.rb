@@ -1,7 +1,6 @@
 class User < ActiveRecord::Base
     has_one :house
     has_many :skills
-    has_many :characters, through: :house
 
     def self.login
         puts "Please login.  What is your character name?"

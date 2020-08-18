@@ -12,29 +12,14 @@
 
 ActiveRecord::Schema.define(version: 8) do
 
-  create_table "adventures", force: :cascade do |t|
-    t.string "name"
-    t.string "house_id"
-  end
-
   create_table "characters", force: :cascade do |t|
     t.string "name"
-    t.string "title"
-    t.string "house"
+    t.string "titles"
   end
 
-  create_table "houses", force: :cascade do |t|
-    t.string "name"
-    t.string "region"
-    t.string "coat_of_arms"
-    t.string "words"
-    t.string "founded"
-    t.string "died_out"
-  end
-
-  create_table "items", force: :cascade do |t|
-    t.string "name"
-    t.integer "adventure_id"
+  create_table "library", force: :cascade do |t|
+    t.string "view_family_members"
+    t.string "view_skills"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -42,9 +27,18 @@ ActiveRecord::Schema.define(version: 8) do
     t.integer "house_id"
   end
 
+  create_table "skills", force: :cascade do |t|
+    t.integer "sword_fighting"
+    t.integer "archery"
+    t.integer "horde_riding"
+    t.integer "survival_skills"
+    t.integer "Fatigue"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "password"
+    t.string "gender"
   end
 
 end

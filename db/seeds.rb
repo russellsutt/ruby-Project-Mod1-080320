@@ -15,7 +15,7 @@ jon = GameOfThronesApi.find_character('Jon Snow')
 
 
 def character_data(character)
-    character.each { |character| Character.create(name: character["name"], title: character["title"], alias: character["alias"], house: "House Stark of Winterfell")}
+    character.each { |character| Character.create(name: character["name"], titles: character["titles"])}
 end
 
 
@@ -25,8 +25,6 @@ ned_character = character_data(ned)
 robb_character = character_data(robb)
 jon_character = character_data(jon)
 
-
-binding.pry
 
 
 # puts "here for pry"
