@@ -14,13 +14,14 @@ ActiveRecord::Schema.define(version: 9) do
 
   create_table "adventures", force: :cascade do |t|
     t.string "name"
-    t.string "house_id"
+    t.integer "house_id"
   end
 
   create_table "characters", force: :cascade do |t|
     t.string "name"
     t.string "titles"
-    t.integer "houses_id"
+    t.string "quote"
+    t.integer "house_id"
   end
 
   create_table "houses", force: :cascade do |t|

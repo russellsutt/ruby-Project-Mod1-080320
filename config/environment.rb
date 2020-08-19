@@ -7,5 +7,6 @@ ActiveRecord::Base.establish_connection(
 )
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
+Logger.new('/dev/null')
 
 require_all 'app'
