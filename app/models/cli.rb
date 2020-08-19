@@ -23,9 +23,7 @@ class CLI
             puts "Welcome home, #{user.name} Stark."
             # sleep (2)
             puts "Take a look around and explore the castle!"
+            House.first.welcome_home
         end
     end
-
-
-    # User.last.user_houses.first.house
 end

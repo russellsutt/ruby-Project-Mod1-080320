@@ -10,10 +10,11 @@ Character.destroy_all
 Library.destroy_all
 User.destroy_all
 UserHouse.destroy_all
+SkillSet.destroy_all
 
 
 library = Library.new(name: "The Winterfell Library")
-skills = Skill.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
+skill_set = SkillSet.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
 
 #Creates house data
 stark = GameOfThronesApi.find_house("stark")
@@ -60,17 +61,11 @@ ned_data = character_data(ned)
 robb_data = character_data(robb)
 jon_data = character_data(jon)
 
-arya_quote = "Leave one wolf alive and the sheep are never safe."
-sansa_quote = "You're going to die tomorrow, Lord Bolton. Sleep well."
-ned_quote = "You think my life is such a precious thing to me, that I would trade my honor for a few more years... of what?"
-robb_quote = "Tell Lord Tywin winter is coming for him. Twenty thousand northerners marching south to find out if he really does shit gold."
-jon_quote = "They were born on the wrong side of the Wall — doesn’t make them monsters."
-
 Character.first.update(quote: "Leave one wolf alive and the sheep are never safe.")
-Character.second.update(quote: "You're going to die tomorrow, Lord Bolton. Sleep well.")
+Character.second.update(quote: "When the snows fall and the white winds blow, the lone wolf dies, but the pack survives.")
 Character.third.update(quote: "You think my life is such a precious thing to me, that I would trade my honor for a few more years... of what?")
-Character.fourth.update(quote: "Tell Lord Tywin winter is coming for him. Twenty thousand northerners marching south to find out if he really does shit gold.")
-Character.fifth.update(quote: "They were born on the wrong side of the Wall — doesn’t make them monsters.")
+Character.fourth.update(quote: "tell Lord Tywin winter is coming for him. Twenty thousand northerners marching south to find out if he really does shit gold.")
+Character.fifth.update(quote: "Just because they were born on the wrong side of the Wall — doesn’t make them monsters.")
 
     
 #House.create(name: d["name"], region: d["region"], coat_of_arms: d["coatOfArms"], words: d["words"], founded: d["founded"], died_out: d["diedOut"])

@@ -48,7 +48,8 @@ ActiveRecord::Schema.define(version: 9) do
     t.integer "house_id"
   end
 
-  create_table "skills", force: :cascade do |t|
+  create_table "skill_sets", force: :cascade do |t|
+    t.integer "intellegince"
     t.integer "sword_fighting"
     t.integer "archery"
     t.integer "horse_riding"

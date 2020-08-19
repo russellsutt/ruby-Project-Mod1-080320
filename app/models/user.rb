@@ -2,9 +2,10 @@ require 'tty-prompt'
 require 'pry'
 
 class User < ActiveRecord::Base
-    has_many :skills
+    has_many :user_skill_sets
+    has_one :skill_set, through: :user_skill_sets
     has_many :user_houses
-    has_many :houses, through: :character_houses
+    has_many :houses, through: :user_houses
 
     def self.login
         prompt = TTY::Prompt.new
@@ -20,7 +21,6 @@ class User < ActiveRecord::Base
             menu.choice name: "Start a new Game", value: 1
             menu.choice name: "Continue Game", value: 2, disabled: "(No saved available.)"
             menu.choice name: "Quit", value: 3, disabled: "(You can't quit now!)"
-            end
         end
     end
 
