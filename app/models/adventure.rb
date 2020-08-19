@@ -1,5 +1,6 @@
 require 'pry'
 require 'tty-prompt'
+require 'colorize'
 
 class Adventure < ActiveRecord::Base
     belongs_to :house

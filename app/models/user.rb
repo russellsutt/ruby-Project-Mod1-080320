@@ -1,5 +1,6 @@
 require 'tty-prompt'
 require 'pry'
+require 'colorize'
 
 class User < ActiveRecord::Base
     has_many :user_skill_sets

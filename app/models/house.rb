@@ -1,5 +1,6 @@
 require 'tty-prompt'
 require 'pry'
+require 'colorize'
 
 class House < ActiveRecord::Base
     has_many :user_houses
@@ -16,19 +17,22 @@ class House < ActiveRecord::Base
             menu.choice name: "Go to the library.", value: 3
             menu.choice name: "Train Skills", value: 4
             menu.choice name: "Go on an adventure.", value: 5
+            menu.choice name: "Back to main menu.", value: 6
         end
         if player_selection == 1
             Character.talk_to_family
-        if player_selection == 2
+        elsif player_selection == 2
+            Room.user_room
+        elsif player_selection == 3
+            Library.library_menu
+        elsif player_selection == 4
             
-        if player_selection == 3
-        if player_selection == 4
-        if player_selection == 5
+        elsif player_selection == 5
+
+        else player_selection == 6
+            cli = CLI.new
+            cli.start
         end
     end
-
-
-
-
 
 end

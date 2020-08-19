@@ -1,7 +1,12 @@
 require 'pry'
 require 'tty-prompt'
+require 'colorize'
 
 class CLI
+
+
+    # pid = fork{ exec 'afplay', 'assets/music/got_main_theme_extended.mp3'}
+    # #killall afplay
 
     def start
         puts "Welcome to Game of Thrones CLI!"
