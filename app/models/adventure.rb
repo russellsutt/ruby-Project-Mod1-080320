@@ -12,7 +12,7 @@ class Adventure < ActiveRecord::Base
         selection = prompt.select("Where do you want to explore?") do |menu|
             menu.choice name: "The Crypt of Winterfell", value: 1
             menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
-            menu.choice name: "The Castle Towers", value: 3
+            menu.choice name: "The Castle Towers", value: 3 #not built out, if time?
         end
         #conditionals for 1,2,3
 
@@ -23,7 +23,7 @@ class Adventure < ActiveRecord::Base
             Adventure.find_torch
         elsif selection == 2
             #method for godswood
-            puts "Welcome to the Godswood of Winterfell! Be careful, who knows what you will stumble upon here."
+            puts "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
             sleep (2)
             Adventure.ghost_option
         else selection == 3
@@ -216,9 +216,54 @@ end
             sleep (2)
             find_arya #rerun to find arya
         elsif selection == 3
-            puts "Hey! You found me, nice job. But you must first answer this question to get the prize."
-            ##build another method => answer secret question if right give this item to user
+            puts "Hey! You found me, nice job. But that was too easy. You must first answer my question to get the prize."
+            Adventure.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
+        end
+    end
+
+    def self.arya_question
+        prompt = TTY::Prompt.new
+        question_array = [
+            #question_array.sample[:question] to get random question back
+            #get quesions related to 
+            {"question": "Was Brandon Stark the first Stark?", "answer": "yes"},
+            {"question": "Are there any Stark swords in the Iron Throne?", "answer": "no"}
+        ]
+        chosen_question = question_array.sample[:question]
+        selection = prompt.select(chosen_question) do |menu|
+            prompt = TTY::Prompt.new
+            menu.choice name: "yes", value: 1
+            menu.choice name: "no", value: 2
+        end
+        if chosen_question == question_array.first[:question] && selection == 1
+            #Correct!
+            ##store item with user
+            puts "That is correct! Here is a golden dragon."
+        elsif chosen_question == question_array.second[:question] && selection == 2
+            #Correct!
+            ##store item with user
+            puts "That is correct! Here is a golden dragon."
+        else
+            puts "Sorry that is not correct."
+            sleep (2)
+            #try again method
+            Adventure.question_try_again
+        end
+
+    end
+
+    def self.question_try_again
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Would you like to try again?") do |menu|
+            prompt = TTY::Prompt.new
+            menu.choice name: "yes", value: 1
+            menu.choice name: "no", value: 2
+        end
+        if selection == 1
+            Adventure.arya_question #to recall question method
+        elsif selection == 2
+            #exit to castle or adventure home screen??
         end
     end
 
