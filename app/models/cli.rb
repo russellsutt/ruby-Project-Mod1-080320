@@ -3,9 +3,6 @@ require 'tty-prompt'
 
 class CLI
 
-    #User.destroy_all
-    #UserHouse.destroy_all
-
     def start
         puts "Welcome to Game of Thrones CLI!"
 

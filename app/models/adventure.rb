@@ -13,6 +13,7 @@ class Adventure < ActiveRecord::Base
             menu.choice name: "The Crypt of Winterfell", value: 1
             menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
             menu.choice name: "The Castle Towers", value: 3 #not built out, if time?
+            menu.choice name: "Go back to castle", value: 4 #not built out, if time?
         end
         #conditionals for 1,2,3
 
@@ -26,8 +27,13 @@ class Adventure < ActiveRecord::Base
             puts "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
             sleep (2)
             Adventure.ghost_option
-        else selection == 3
+        elsif selection == 3
             #method for tower
+            puts "Sorry, not available."
+            sleep (2)
+            Adventure.start
+        elsif selection == 4
+            #go back to castle method
         end
     end
 
@@ -38,14 +44,15 @@ def self.ghost_option
     prompt = TTY::Prompt.new
     selection = prompt.select("Do you want to play with Ghost?") do |menu|
         menu.choice name: "yes", value: 1
-        menu.choice name: "no, return to Godswood", value: 2
+        menu.choice name: "no, go back to adventures.", value: 2
     end
     if selection == 1
         puts "Remember Ghost is very shy!"
         sleep(2)
         Adventure.play_with_ghost
     elsif selection == 2
-        #return to castle or main adventure screen
+        #return to adventure screen
+        Adventure.start
     end
 end
 
@@ -54,7 +61,7 @@ def self.play_with_ghost
     selection = prompt.select("Ghost looks hungy!") do |menu|
         menu.choice name: "Feed Ghost some of your leftover pie", value: 1
         menu.choice name: "Pet Ghost", value: 2
-        menu.choice name: "Leave Ghose alone, return to castle", value: 3
+        menu.choice name: "Leave Ghose alone, return to adventures", value: 3
     end
     if selection == 1
         puts "Wow, he ate that fast. He must of been hungry!"
@@ -67,6 +74,7 @@ def self.play_with_ghost
         play_with_ghost
     elsif selection ==3
         #return to castle or main adventure screen
+        Adventure.start
     end
 end
 
@@ -75,7 +83,7 @@ end
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to practice with Jon?") do |menu|
             menu.choice name: "yes", value: 1
-            menu.choice name: "no", value: 2
+            menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
             # hey player's name, warning I am not going to go easy on you or somthing like that
@@ -85,6 +93,7 @@ end
         elsif selection == 2
             #have another option here?
             #return to castle or main adventure screen
+            Adventure.start
         end
     end
 
@@ -98,6 +107,7 @@ end
             menu.choice name: "Attack", value: 2
             menu.choice name: "Roll", value: 3
             menu.choice name: "Guard", value: 4
+            menu.choice name: "Claim defeat", value: 5
         end
         #create an array? that user sequence must contain those moves to win?
         # return random sayings from Jon ?
@@ -117,11 +127,14 @@ end
             puts "John says, nice block. I'm impressed!"
             sleep (2)
             practice_with_jon #to rerun jon method
+        elsif selection == 5
+            puts "That is too bad. Come back anytime." #or something like that
+            Adventure.start
         end 
     end
 
     def self.item_from_jon
-        puts "A great fighter needs a great sword. Take my extra sword"
+        puts "A great fighter needs a great sword. Here take my extra sword"
         sleep (2)
         #method to add sword item to user's item
         Adventure.visit_heart_tree_option
@@ -132,12 +145,13 @@ end
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to visit the tree?") do |menu|
             menu.choice name: "yes", value: 1
-            menu.choice name: "no", value: 2
+            menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
             Adventure.interact_with_heart_tree
         elsif selection == 2
              #return to castle or main adventure screen
+             Adventure.start
         end
     end
 
@@ -146,6 +160,7 @@ end
         selection = prompt.select("What do you want to do?") do |menu|
             menu.choice name: "Ask the heart tree for advice?", value: 1
             menu.choice name: "Take a nap under the heart tree?", value: 2
+            menu.choice name: "Go back to adventures.", value: 3
         end
         if selection == 1
             Adventure.talk_to_tree
@@ -154,6 +169,8 @@ end
             sleep (5) #longer sleep feature because you are napping??
             ##lower fatigue skill
             ##show skills
+        elsif selection == 3
+            Adventure.start
         end
     end
 
@@ -185,7 +202,7 @@ end
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to play?") do |menu|
             menu.choice name: "yes", value: 1
-            menu.choice name: "no", value: 2
+            menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
             puts "Arya says if you find her you'll get a prize!"
@@ -196,6 +213,7 @@ end
         elsif selection == 2
             #have another option here?
             #return to castle or main adventure screen
+            Adventure.start
         end
     end
 
@@ -258,12 +276,13 @@ end
         selection = prompt.select("Would you like to try again?") do |menu|
             prompt = TTY::Prompt.new
             menu.choice name: "yes", value: 1
-            menu.choice name: "no", value: 2
+            menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
             Adventure.arya_question #to recall question method
         elsif selection == 2
             #exit to castle or adventure home screen??
+            Adventure.start
         end
     end
 
