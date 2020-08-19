@@ -100,13 +100,67 @@ end
             menu.choice name: "Guard", value: 4
         end
         #create an array? that user sequence must contain those moves to win?
+        # return random sayings from Jon ?
         if selection == 1
+            puts "John says, nice try!"
+            sleep (2)
+            practice_with_jon #to rerun jon method
         elsif selection == 2
+            puts "Wow, I did not see that coming. Great job!"
+            sleep(2)
+            Adventure.item_from_jon#method here for jon to give user item
         elsif selection == 3
+            puts "John says, you almost got me!"
+            sleep (2)
+            practice_with_jon #to rerun jon method
         elsif selection == 4
+            puts "John says, nice block. I'm impressed!"
+            sleep (2)
+            practice_with_jon #to rerun jon method
         end 
     end
 
+    def self.item_from_jon
+        puts "A great fighter needs a great sword. Take my extra sword"
+        sleep (2)
+        #method to add sword item to user's item
+        Adventure.visit_heart_tree_option
+    end
+
+    def self.visit_heart_tree_option
+        puts "Wow there is the heart tree!"
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Do you want to visit the tree?") do |menu|
+            menu.choice name: "yes", value: 1
+            menu.choice name: "no", value: 2
+        end
+        if selection == 1
+            Adventure.interact_with_heart_tree
+        elsif selection == 2
+             #return to castle or main adventure screen
+        end
+    end
+
+    def self.interact_with_heart_tree
+        prompt = TTY::Prompt.new
+        selection = prompt.select("What do you want to do?") do |menu|
+            menu.choice name: "Ask the heart tree for advice?", value: 1
+            menu.choice name: "Take a nap under the heart tree?", value: 2
+        end
+        if selection == 1
+            Adventure.talk_to_tree
+        elsif selection == 2
+            #some kind of sleep greeting etc.
+            sleep (5) #longer sleep feature because you are napping??
+            ##lower fatigue skill
+            ##show skills
+        end
+    end
+
+    def self.talk_to_tree
+        #return random advice
+
+    end
  #CRYPT METHODS BELOW   
     def self.find_torch
         #survival skills up 1
@@ -139,7 +193,7 @@ end
             puts "Let's go!"
             sleep (2)
             Adventure.find_arya
-        elsif selection == 1
+        elsif selection == 2
             #have another option here?
             #return to castle or main adventure screen
         end
