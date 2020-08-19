@@ -59,6 +59,7 @@ def self.play_with_ghost
     if selection == 1
         puts "Wow, he ate that fast. He must of been hungry!"
         sleep (2)
+        Adventure.jon_option
         #return to castle or main adventure screen
     elsif selection == 2
         puts "Ghost did not like that! He must be tired, maybe we should leave him alone"
@@ -70,8 +71,41 @@ def self.play_with_ghost
 end
 
     def self.jon_option
+        puts "There is Jon practicing sword fighting!"
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Do you want to practice with Jon?") do |menu|
+            menu.choice name: "yes", value: 1
+            menu.choice name: "no", value: 2
+        end
+        if selection == 1
+            # hey player's name, warning I am not going to go easy on you or somthing like that
+            puts "Get ready..."
+            sleep(2)
+            Adventure.practice_with_jon
+        elsif selection == 2
+            #have another option here?
+            #return to castle or main adventure screen
+        end
     end
 
+    def self.practice_with_jon
+        ##on guard greetting?
+        ##lower fatigue skill by 1
+        ##raise sword fighting skill by 1
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Pick your move") do |menu|
+            menu.choice name: "Lunge", value: 1
+            menu.choice name: "Attack", value: 2
+            menu.choice name: "Roll", value: 3
+            menu.choice name: "Guard", value: 4
+        end
+        #create an array? that user sequence must contain those moves to win?
+        if selection == 1
+        elsif selection == 2
+        elsif selection == 3
+        elsif selection == 4
+        end 
+    end
 
  #CRYPT METHODS BELOW   
     def self.find_torch
