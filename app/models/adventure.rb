@@ -7,16 +7,14 @@ class Adventure < ActiveRecord::Base
     has_many :user_adventures
     has_many :users, through: :user_adventures
 
-    def start_winterfell_adventure  #change to start winterfell method
-        binding.pry
-        #prompt with greeting and for them to pick something
+    def start_winterfell_adventure 
         puts "Great lets go on an adventure! It is winter so beware of the cold..."
         prompt = TTY::Prompt.new
-        selection = prompt.select("Where do you want to explore?") do |menu|
+        selection = prompt.select("#{UserAdventure.last.user.name}, where do you want to explore?") do |menu|
             menu.choice name: "The Crypt of Winterfell", value: 1
             menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
-            menu.choice name: "The Castle Towers", value: 3 #not built out, if time?
-            menu.choice name: "Go back to castle", value: 4 #not built out, if time?
+            menu.choice name: "The Castle Towers", value: 3, disabled: "(Off limits, the guards are there.)"
+            menu.choice name: "Go back to castle", value: 4 
         end
         #conditionals for 1,2,3
 
@@ -37,8 +35,11 @@ class Adventure < ActiveRecord::Base
             self.start_winterfell_adventure 
         elsif selection == 4
             #go back to castle method
+            Home.welcome_home
         end
     end
+
+#Skill methods
 
 
 #GODSWOOD METHODS BELOW
@@ -74,6 +75,10 @@ def play_with_ghost
     elsif selection == 2
         puts "Ghost did not like that! He must be tired, maybe we should leave him alone"
         sleep (2)
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.fatigue += 1
+        puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
+        sleep (2)
         play_with_ghost
     elsif selection ==3
         #return to castle or main adventure screen
@@ -90,7 +95,7 @@ end
         end
         if selection == 1
             # hey player's name, warning I am not going to go easy on you or somthing like that
-            puts "Get ready..."
+            puts "Hey #{UserAdventure.last.user.name}, fair warning I am not going to go easy on you..."
             sleep(2)
             self.practice_with_jon
         elsif selection == 2
@@ -115,11 +120,15 @@ end
         #create an array? that user sequence must contain those moves to win?
         # return random sayings from Jon ?
         if selection == 1
-            puts "John says, nice try!"
+            puts "Yikes you missed!"
             sleep (2)
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.fatigue += 1
+            puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
+            puts (sleep)
             practice_with_jon #to rerun jon method
         elsif selection == 2
-            puts "Wow, I did not see that coming. Great job!"
+            puts "Wow, I did not see that coming. Great job #{UserAdventure.last.user.name}!"
             sleep(2)
             self.item_from_jon#method here for jon to give user item
         elsif selection == 3
@@ -127,7 +136,7 @@ end
             sleep (2)
             self.practice_with_jon #to rerun jon method
         elsif selection == 4
-            puts "John says, nice block. I'm impressed!"
+            puts "John says, nice block!"
             sleep (2)
             self.practice_with_jon #to rerun jon method
         elsif selection == 5
@@ -137,8 +146,12 @@ end
     end
 
     def item_from_jon
-        puts "A great fighter needs a great sword. Here take my extra sword"
+        puts "A great fighter needs a great sword. Here take my spare."
         sleep (2)
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.sword_fighting += 1
+            puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
+            sleep (2)
         #method to add sword item to user's item
         self.visit_heart_tree_option
     end
@@ -161,7 +174,7 @@ end
     def interact_with_heart_tree
         prompt = TTY::Prompt.new
         selection = prompt.select("What do you want to do?") do |menu|
-            menu.choice name: "Ask the heart tree for advice?", value: 1
+            menu.choice name: "Ask the heart tree for advice?", value: 1, disabled: "(The tree is sleeping.)"
             menu.choice name: "Take a nap under the heart tree?", value: 2
             menu.choice name: "Go back to adventures.", value: 3
         end
@@ -169,9 +182,14 @@ end
             self.talk_to_tree
         elsif selection == 2
             #some kind of sleep greeting etc.
-            sleep (5) #longer sleep feature because you are napping??
-            ##lower fatigue skill
-            ##show skills
+            sleep (4) #longer sleep feature because you are napping??
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.fatigue -= 1
+            puts "Your fatigue skill is now #{user_skills.fatigue}."
+            sleep (2)
+            puts "It is getting dark. Time to return back to the castle."
+            sleep (2)
+            House.welcome_home
         elsif selection == 3
             self.start_winterfell_adventure 
         end
@@ -195,6 +213,10 @@ end
             find_torch #rerun to find torch
         elsif selection == 2
             puts "Ah-ha! There is the torch, now we have light!"
+            sleep (2)
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.survival_skills += 1
+            puts "Your survival skill is now #{user_skills.survival_skills}!"
             sleep (2)
             self.arya_option
         end
@@ -235,9 +257,15 @@ end
         elsif selection == 2
             puts "No one is there!"
             sleep (2)
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.fatigue += 1
+            puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
+            sleep (2)
             self.find_arya #rerun to find arya
         elsif selection == 3
-            puts "Hey! You found me, nice job. But that was too easy. You must first answer my question to get the prize."
+            puts "Hey #{UserAdventure.last.user.name}! You found me, nice job..."
+            sleep (2)
+            puts "But that was too easy. You must first answer my question to get the prize."
             self.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
         end
@@ -261,10 +289,25 @@ end
             #Correct!
             ##store item with user
             puts "That is correct! Here is a golden dragon."
+            sleep (2)
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.intelligence += 1
+            puts "Your intelligence skill is now #{user_skills.intelligence}!"
+            sleep (2)
+            puts "It is now time to go back to the castle!"
+            sleep (2)
+            House.welcome_home
         elsif chosen_question == question_array.second[:question] && selection == 2
             #Correct!
             ##store item with user
             puts "That is correct! Here is a golden dragon."
+            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            user_skills.intelligence += 1
+            puts "Your intelligence skill is now #{user_skills.intelligence}!"
+            sleep (2)
+            puts "It is now time to go back to the castle!"
+            sleep (2)
+            House.welcome_home
         else
             puts "Sorry that is not correct."
             sleep (2)

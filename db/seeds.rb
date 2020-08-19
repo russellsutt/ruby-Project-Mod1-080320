@@ -10,7 +10,8 @@ Character.destroy_all
 Library.destroy_all
 User.destroy_all
 UserHouse.destroy_all
-
+UserSkillSet.destroy_all
+UserLibrary.destroy_all
 
 library = Library.new(name: "The Winterfell Library")
 #skill_set = SkillSet.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
@@ -36,6 +37,8 @@ martel_house = house_data(martel)
 
 room = Room.create(name: "bed chamber", house_id: stark_house)
 
+#Create Stark Adventure
+stark_adventure = Adventure.create(name: "Stark Adventure", house: House.first)
 
 #Creates items for Stark adventures
 itemone = Item.create(name: "sword", adventure_id: stark_house)

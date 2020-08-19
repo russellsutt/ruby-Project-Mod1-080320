@@ -19,10 +19,10 @@ class House < ActiveRecord::Base
         end
 
         if player_selection == 1            
-            Characters.talk_to_family
+            #Characters.talk_to_family
         elsif player_selection == 5
             #for Winterfell adventure
-            Adventure.create(name: "Stark Adventure", house: House.first)
+            UserAdventure.create(user: House.first.user_houses.last.user, adventure: Adventure.first)
             Adventure.first.start_winterfell_adventure        
         end   
     end
