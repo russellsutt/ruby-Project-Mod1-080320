@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 9) do
+ActiveRecord::Schema.define(version: 10) do
 
   create_table "adventures", force: :cascade do |t|
     t.string "name"
@@ -48,17 +48,23 @@ ActiveRecord::Schema.define(version: 9) do
     t.integer "house_id"
   end
 
-  create_table "skills", force: :cascade do |t|
-    t.integer "sword_fighting"
-    t.integer "archery"
-    t.integer "horse_riding"
-    t.integer "survival_skills"
-    t.integer "fatigue"
+  create_table "skill_sets", force: :cascade do |t|
+    t.integer "sword_fighting", default: 1
+    t.integer "archery", default: 1
+    t.integer "horse_riding", default: 1
+    t.integer "survival_skills", default: 1
+    t.integer "fatigue", default: 1
+    t.integer "intelligence", default: 1
   end
 
   create_table "user_houses", force: :cascade do |t|
     t.integer "user_id"
     t.integer "house_id"
+  end
+
+  create_table "user_skill_sets", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "skill_set_id"
   end
 
   create_table "users", force: :cascade do |t|

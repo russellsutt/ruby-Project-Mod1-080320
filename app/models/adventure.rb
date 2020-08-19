@@ -5,7 +5,8 @@ class Adventure < ActiveRecord::Base
     belongs_to :house
     has_many :items
 
-    def self.start
+    def start_winterfell_adventure  #change to start winterfell method
+        binding.pry
         #prompt with greeting and for them to pick something
         puts "Great lets go on an adventure! It is winter so beware of the cold..."
         prompt = TTY::Prompt.new
@@ -21,17 +22,17 @@ class Adventure < ActiveRecord::Base
             #method for crypt
             puts "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
             sleep (2)
-            Adventure.find_torch
+            self.find_torch
         elsif selection == 2
             #method for godswood
             puts "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
             sleep (2)
-            Adventure.ghost_option
+            self.ghost_option
         elsif selection == 3
             #method for tower
             puts "Sorry, not available."
             sleep (2)
-            Adventure.start
+            self.start_winterfell_adventure 
         elsif selection == 4
             #go back to castle method
         end
@@ -39,7 +40,7 @@ class Adventure < ActiveRecord::Base
 
 
 #GODSWOOD METHODS BELOW
-def self.ghost_option
+def ghost_option
     puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
     prompt = TTY::Prompt.new
     selection = prompt.select("Do you want to play with Ghost?") do |menu|
@@ -49,14 +50,14 @@ def self.ghost_option
     if selection == 1
         puts "Remember Ghost is very shy!"
         sleep(2)
-        Adventure.play_with_ghost
+        self.play_with_ghost
     elsif selection == 2
         #return to adventure screen
-        Adventure.start
+        self.start_winterfell_adventure 
     end
 end
 
-def self.play_with_ghost
+def play_with_ghost
     prompt = TTY::Prompt.new
     selection = prompt.select("Ghost looks hungy!") do |menu|
         menu.choice name: "Feed Ghost some of your leftover pie", value: 1
@@ -66,7 +67,7 @@ def self.play_with_ghost
     if selection == 1
         puts "Wow, he ate that fast. He must of been hungry!"
         sleep (2)
-        Adventure.jon_option
+        self.jon_option
         #return to castle or main adventure screen
     elsif selection == 2
         puts "Ghost did not like that! He must be tired, maybe we should leave him alone"
@@ -74,11 +75,11 @@ def self.play_with_ghost
         play_with_ghost
     elsif selection ==3
         #return to castle or main adventure screen
-        Adventure.start
+        self.start_winterfell_adventure 
     end
 end
 
-    def self.jon_option
+    def jon_option
         puts "There is Jon practicing sword fighting!"
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to practice with Jon?") do |menu|
@@ -89,15 +90,15 @@ end
             # hey player's name, warning I am not going to go easy on you or somthing like that
             puts "Get ready..."
             sleep(2)
-            Adventure.practice_with_jon
+            self.practice_with_jon
         elsif selection == 2
             #have another option here?
             #return to castle or main adventure screen
-            Adventure.start
+            self.start_winterfell_adventure 
         end
     end
 
-    def self.practice_with_jon
+    def practice_with_jon
         ##on guard greetting?
         ##lower fatigue skill by 1
         ##raise sword fighting skill by 1
@@ -118,29 +119,29 @@ end
         elsif selection == 2
             puts "Wow, I did not see that coming. Great job!"
             sleep(2)
-            Adventure.item_from_jon#method here for jon to give user item
+            self.item_from_jon#method here for jon to give user item
         elsif selection == 3
             puts "John says, you almost got me!"
             sleep (2)
-            practice_with_jon #to rerun jon method
+            self.practice_with_jon #to rerun jon method
         elsif selection == 4
             puts "John says, nice block. I'm impressed!"
             sleep (2)
-            practice_with_jon #to rerun jon method
+            self.practice_with_jon #to rerun jon method
         elsif selection == 5
             puts "That is too bad. Come back anytime." #or something like that
-            Adventure.start
+            self.start_winterfell_adventure 
         end 
     end
 
-    def self.item_from_jon
+    def item_from_jon
         puts "A great fighter needs a great sword. Here take my extra sword"
         sleep (2)
         #method to add sword item to user's item
-        Adventure.visit_heart_tree_option
+        self.visit_heart_tree_option
     end
 
-    def self.visit_heart_tree_option
+    def visit_heart_tree_option
         puts "Wow there is the heart tree!"
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to visit the tree?") do |menu|
@@ -148,14 +149,14 @@ end
             menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
-            Adventure.interact_with_heart_tree
+            self.interact_with_heart_tree
         elsif selection == 2
              #return to castle or main adventure screen
-             Adventure.start
+             self.start_winterfell_adventure 
         end
     end
 
-    def self.interact_with_heart_tree
+    def interact_with_heart_tree
         prompt = TTY::Prompt.new
         selection = prompt.select("What do you want to do?") do |menu|
             menu.choice name: "Ask the heart tree for advice?", value: 1
@@ -163,23 +164,23 @@ end
             menu.choice name: "Go back to adventures.", value: 3
         end
         if selection == 1
-            Adventure.talk_to_tree
+            self.talk_to_tree
         elsif selection == 2
             #some kind of sleep greeting etc.
             sleep (5) #longer sleep feature because you are napping??
             ##lower fatigue skill
             ##show skills
         elsif selection == 3
-            Adventure.start
+            self.start_winterfell_adventure 
         end
     end
 
-    def self.talk_to_tree
+    def talk_to_tree
         #return random advice
 
     end
  #CRYPT METHODS BELOW   
-    def self.find_torch
+    def find_torch
         #survival skills up 1
         prompt = TTY::Prompt.new
         selection = prompt.select("Where do you want to look?") do |menu|
@@ -193,11 +194,11 @@ end
         elsif selection == 2
             puts "Ah-ha! There is the torch, now we have light!"
             sleep (2)
-            Adventure.arya_option
+            self.arya_option
         end
     end
 
-    def self.arya_option
+    def arya_option
         puts "What is that sound? Look it's Arya, she wants to play hide and seek!"
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to play?") do |menu|
@@ -209,15 +210,15 @@ end
             sleep(2)
             puts "Let's go!"
             sleep (2)
-            Adventure.find_arya
+            self.find_arya
         elsif selection == 2
             #have another option here?
             #return to castle or main adventure screen
-            Adventure.start
+            self.start_winterfell_adventure 
         end
     end
 
-    def self.find_arya
+    def find_arya
         ##lower fatigue skill by 1
         prompt = TTY::Prompt.new
         selection = prompt.select("Where could Arya be?") do |menu|
@@ -228,19 +229,19 @@ end
         if selection == 1
             puts "She is not there!"
             sleep (2)
-            find_arya #rerun to find arya
+            self.find_arya #rerun to find arya
         elsif selection == 2
             puts "No one is there!"
             sleep (2)
-            find_arya #rerun to find arya
+            self.find_arya #rerun to find arya
         elsif selection == 3
             puts "Hey! You found me, nice job. But that was too easy. You must first answer my question to get the prize."
-            Adventure.arya_question##build another method => answer secret question if right give this item to user
+            self.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
         end
     end
 
-    def self.arya_question
+    def arya_question
         prompt = TTY::Prompt.new
         question_array = [
             #question_array.sample[:question] to get random question back
@@ -266,12 +267,12 @@ end
             puts "Sorry that is not correct."
             sleep (2)
             #try again method
-            Adventure.question_try_again
+            self.question_try_again
         end
 
     end
 
-    def self.question_try_again
+    def question_try_again
         prompt = TTY::Prompt.new
         selection = prompt.select("Would you like to try again?") do |menu|
             prompt = TTY::Prompt.new
@@ -279,10 +280,10 @@ end
             menu.choice name: "no, go back to adventures", value: 2
         end
         if selection == 1
-            Adventure.arya_question #to recall question method
+           self.arya_question #to recall question method
         elsif selection == 2
             #exit to castle or adventure home screen??
-            Adventure.start
+            self.start_winterfell_adventure  #self.first.start ? was here before
         end
     end
 

@@ -13,7 +13,7 @@ UserHouse.destroy_all
 
 
 library = Library.new(name: "The Winterfell Library")
-skills = Skill.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
+#skill_set = SkillSet.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)
 
 #Creates house data
 stark = GameOfThronesApi.find_house("stark")
@@ -36,8 +36,6 @@ martel_house = house_data(martel)
 
 room = Room.create(name: "bed chamber", house_id: stark_house)
 
-#Creates adventure for Stark house    
-adventure = Adventure.create(name: "adventure", house_id: stark_house)
 
 #Creates items for Stark adventures
 itemone = Item.create(name: "sword", adventure_id: stark_house)
