@@ -3,31 +3,29 @@ require 'tty-prompt'
 
 class CLI
 
-    #User.destroy_all
-    #UserHouse.destroy_all
-
     def start
         puts "Welcome to Game of Thrones CLI!"
+        # sleep (2)
         user = User.login
-        User.start_game
-
-        #User.pick_a_house
-
-    #self.pick_a_house
         prompt = TTY::Prompt.new
+        # sleep (2)
+        user.start_game
         house_selection = prompt.select("Please pick an house?") do |menu|
             menu.choice name: "House Stark of Winterfell", value: 1
-        end
-        #need to have if/elis/else if they pick another house
+            menu.choice name: "House Lannister of Casterly Rock", value: 2, disabled: "(Everyone in this house is dead.)"
+            end
         if house_selection == 1
-            UserHouse.create(user: user, house: House.first)
+            UserHouse.find_or_create_by(user_id: user.id, house_id: House.first.id)
+            # sleep (2)
+            puts "Welcome to House Stark, #{user.name} Stark."
+            # sleep (2)
+            prompt.select("Enter Winterfell", %w(Enter))
+            puts "Welcome home, #{user.name} Stark."
+            # sleep (2)
+            puts "Take a look around and explore the castle!"
         end
-    
-        
-        #binding.pry 
-        #find user or create user
-        #intro screen with music/image
-       
-       
     end
+
+
+    # User.last.user_houses.first.house
 end

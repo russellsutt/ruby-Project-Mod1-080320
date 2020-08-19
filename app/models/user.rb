@@ -1,9 +1,10 @@
 require 'tty-prompt'
+require 'pry'
 
 class User < ActiveRecord::Base
     has_many :skills
     has_many :user_houses
-    has_many :houses,through: :user_houses
+    has_many :houses, through: :character_houses
 
     def self.login
         prompt = TTY::Prompt.new
@@ -13,25 +14,15 @@ class User < ActiveRecord::Base
         User.find_or_create_by(name: name, password: password, gender: gender)
     end
 
-    def self.start_game
+    def start_game
         prompt = TTY::Prompt.new
-        prompt.select("Please pick an option?") do |menu|
+        selection = prompt.select("Please pick an option?") do |menu|
             menu.choice name: "Start a new Game", value: 1
-            menu.choice name: "Continue Game", value: 1
-            menu.choice name: "Quit", value: 1
+            menu.choice name: "Continue Game", value: 2, disabled: "(No saved available.)"
+            menu.choice name: "Quit", value: 3, disabled: "(You can't quite now!)"
+            end
         end
     end
-
-    # def self.pick_a_house
-    #     prompt = TTY::Prompt.new
-    #     house = prompt.select("Please pick an house?") do |menu|
-    #         menu.choice name: "House Stark of Winterfell", value: 1
-    #     end
-    #     #need to have if/elis/else if they pick another house
-    #     if house == 1
-    #         UserHouse.create(user: self, house: House.find_by(name: house))
-    #     end
-    # end
 
     def view_profile
         puts "Your character name is #{self.name}"
