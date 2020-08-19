@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
     has_one :skill_set, through: :user_skill_sets
     has_many :user_houses
     has_many :houses, through: :user_houses
+    has_many :user_adventures
+    has_one :adventure, through: :user_adventures
+    has_many :user_libraries
+    has_one :library, through: :user_libraries
 
     def self.login
         prompt = TTY::Prompt.new

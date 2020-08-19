@@ -4,6 +4,8 @@ require 'tty-prompt'
 class Adventure < ActiveRecord::Base
     belongs_to :house
     has_many :items
+    has_many :user_adventures
+    has_many :users, through: :user_adventures
 
     def start_winterfell_adventure  #change to start winterfell method
         binding.pry
