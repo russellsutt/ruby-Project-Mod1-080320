@@ -11,24 +11,71 @@ class Adventure < ActiveRecord::Base
         prompt = TTY::Prompt.new
         selection = prompt.select("Where do you want to explore?") do |menu|
             menu.choice name: "The Crypt of Winterfell", value: 1
-            menu.choice name: "The Castle Towers", value: 2
-            menu.choice name: "Godswood of Winterfell", value: 3 #forest ??
+            menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
+            menu.choice name: "The Castle Towers", value: 3
         end
         #conditionals for 1,2,3
 
         if selection == 1
             #method for crypt
-            puts "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light"
+            puts "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
             sleep (2)
             Adventure.find_torch
         elsif selection == 2
-            #method for tower
+            #method for godswood
+            puts "Welcome to the Godswood of Winterfell! Be careful, who knows what you will stumble upon here."
+            sleep (2)
+            Adventure.ghost_option
         else selection == 3
-            #method for winterfell
+            #method for tower
         end
     end
 
+
+#GODSWOOD METHODS BELOW
+def self.ghost_option
+    puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
+    prompt = TTY::Prompt.new
+    selection = prompt.select("Do you want to play with Ghost?") do |menu|
+        menu.choice name: "yes", value: 1
+        menu.choice name: "no, return to Godswood", value: 2
+    end
+    if selection == 1
+        puts "Remember Ghost is very shy!"
+        sleep(2)
+        Adventure.play_with_ghost
+    elsif selection == 2
+        #return to castle or main adventure screen
+    end
+end
+
+def self.play_with_ghost
+    prompt = TTY::Prompt.new
+    selection = prompt.select("Ghost looks hungy!") do |menu|
+        menu.choice name: "Feed Ghost some of your leftover pie", value: 1
+        menu.choice name: "Pet Ghost", value: 2
+        menu.choice name: "Leave Ghose alone, return to castle", value: 3
+    end
+    if selection == 1
+        puts "Wow, he ate that fast. He must of been hungry!"
+        sleep (2)
+        #return to castle or main adventure screen
+    elsif selection == 2
+        puts "Ghost did not like that! He must be tired, maybe we should leave him alone"
+        sleep (2)
+        play_with_ghost
+    elsif selection ==3
+        #return to castle or main adventure screen
+    end
+end
+
+    def self.jon_option
+    end
+
+
+ #CRYPT METHODS BELOW   
     def self.find_torch
+        #survival skills up 1
         prompt = TTY::Prompt.new
         selection = prompt.select("Where do you want to look?") do |menu|
             menu.choice name: "Next to the tomb of Lord Rickard Stark", value: 1
@@ -59,8 +106,8 @@ class Adventure < ActiveRecord::Base
             sleep (2)
             Adventure.find_arya
         elsif selection == 1
-            #make one last misson
-            #option to exit ?
+            #have another option here?
+            #return to castle or main adventure screen
         end
     end
 
@@ -81,20 +128,10 @@ class Adventure < ActiveRecord::Base
             sleep (2)
             find_arya #rerun to find arya
         elsif selection == 3
-            puts "Hey! You found me, nice job. Here is a silver stag."
-            ##give this item to user
+            puts "Hey! You found me, nice job. But you must first answer this question to get the prize."
+            ##build another method => answer secret question if right give this item to user
             sleep (2)
         end
     end
-
-    def play_with_ghost_option
-        puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
-        prompt = TTY::Prompt.new
-        selection = prompt.select("Do you want to play?") do |menu|
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, return to castle", value: 2
-        end
-    end
-
 
 end
