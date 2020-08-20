@@ -14,7 +14,7 @@ class Adventure < ActiveRecord::Base
             menu.choice name: "The Crypt of Winterfell", value: 1
             menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
             menu.choice name: "The Castle Towers", value: 3, disabled: "(Off limits, the guards are there.)"
-            menu.choice name: "Go back to castle", value: 4 
+            menu.choice name: "Go Back", value: 4 
         end
         #conditionals for 1,2,3
 
@@ -35,11 +35,34 @@ class Adventure < ActiveRecord::Base
             self.start_winterfell_adventure 
         elsif selection == 4
             #go back to castle method
-            Home.welcome_home
+            House.welcome_home
         end
     end
 
 #Skill methods
+    def lower_fatigue_skill
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.fatigue += 1
+        user_skills.save
+        puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
+        sleep (2)
+    end
+
+    def raise_intelligence_skill
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.intelligence += 1
+        user_skills.save
+        puts "Your intelligence skill is now #{user_skills.intelligence}!"
+        sleep (2)
+    end
+
+    def raise_sword_fighting_skill
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.sword_fighting += 1
+        user_skills.save
+        puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
+        sleep (2)
+    end
 
 
 #GODSWOOD METHODS BELOW
@@ -63,9 +86,9 @@ end
 def play_with_ghost
     prompt = TTY::Prompt.new
     selection = prompt.select("Ghost looks hungy!") do |menu|
-        menu.choice name: "Feed Ghost some of your leftover pie", value: 1
-        menu.choice name: "Pet Ghost", value: 2
-        menu.choice name: "Leave Ghose alone, return to adventures", value: 3
+        menu.choice name: "Feed Ghost some of your leftover pie.", value: 1
+        menu.choice name: "Pet Ghost.", value: 2
+        menu.choice name: "Leave Ghost alone, return to adventures.", value: 3
     end
     if selection == 1
         puts "Wow, he ate that fast. He must of been hungry!"
@@ -73,13 +96,10 @@ def play_with_ghost
         self.jon_option
         #return to castle or main adventure screen
     elsif selection == 2
-        puts "Ghost did not like that! He must be tired, maybe we should leave him alone"
+        puts "Ghost did not like that! Maybe we should leave him alone."
         sleep (2)
-        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-        user_skills.fatigue += 1
-        puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
-        sleep (2)
-        play_with_ghost
+        self.lower_fatigue_skill
+        self.play_with_ghost
     elsif selection ==3
         #return to castle or main adventure screen
         self.start_winterfell_adventure 
@@ -122,11 +142,8 @@ end
         if selection == 1
             puts "Yikes you missed!"
             sleep (2)
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.fatigue += 1
-            puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
-            puts (sleep)
-            practice_with_jon #to rerun jon method
+            self.lower_fatigue_skill
+            self.practice_with_jon #to rerun jon method
         elsif selection == 2
             puts "Wow, I did not see that coming. Great job #{UserAdventure.last.user.name}!"
             sleep(2)
@@ -148,11 +165,7 @@ end
     def item_from_jon
         puts "A great fighter needs a great sword. Here take my spare."
         sleep (2)
-        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.sword_fighting += 1
-            puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
-            sleep (2)
-        #method to add sword item to user's item
+        raise_sword_fighting_skill
         self.visit_heart_tree_option
     end
 
@@ -174,7 +187,7 @@ end
     def interact_with_heart_tree
         prompt = TTY::Prompt.new
         selection = prompt.select("What do you want to do?") do |menu|
-            menu.choice name: "Ask the heart tree for advice?", value: 1, disabled: "(The tree is sleeping.)"
+            menu.choice name: "Ask the heart tree for advice?", value: 1, disabled: "(The tree is sleeping. Shhhhh!)"
             menu.choice name: "Take a nap under the heart tree?", value: 2
             menu.choice name: "Go back to adventures.", value: 3
         end
@@ -257,15 +270,13 @@ end
         elsif selection == 2
             puts "No one is there!"
             sleep (2)
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.fatigue += 1
-            puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
-            sleep (2)
+            self.lower_fatigue_skill
             self.find_arya #rerun to find arya
         elsif selection == 3
             puts "Hey #{UserAdventure.last.user.name}! You found me, nice job..."
             sleep (2)
             puts "But that was too easy. You must first answer my question to get the prize."
+            sleep (2)
             self.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
         end
@@ -290,10 +301,7 @@ end
             ##store item with user
             puts "That is correct! Here is a golden dragon."
             sleep (2)
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.intelligence += 1
-            puts "Your intelligence skill is now #{user_skills.intelligence}!"
-            sleep (2)
+            self.raise_intelligence_skill
             puts "It is now time to go back to the castle!"
             sleep (2)
             House.welcome_home
@@ -301,10 +309,8 @@ end
             #Correct!
             ##store item with user
             puts "That is correct! Here is a golden dragon."
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.intelligence += 1
-            puts "Your intelligence skill is now #{user_skills.intelligence}!"
             sleep (2)
+            self.raise_intelligence_skill
             puts "It is now time to go back to the castle!"
             sleep (2)
             House.welcome_home

@@ -9,10 +9,7 @@ class CLI
         user = User.login
         prompt = TTY::Prompt.new
         sleep (2)
-        if user.user_skill_sets.empty? #need to move to user_skill_set file / do we need to check or for now we will always have one user
-            UserSkillSet.create(user: user, skill_set: SkillSet.create)
-        end
-        binding.pry
+        user.create_skill_set #if new user
         user.start_game
         house_selection = prompt.select("Please pick a house?") do |menu|
             menu.choice name: "House Stark of Winterfell", value: 1

@@ -31,4 +31,49 @@ class User < ActiveRecord::Base
     def view_profile
         puts "Your character name is #{self.name}"
     end
+
+    def create_skill_set
+        if self.user_skill_sets.empty? 
+            UserSkillSet.create(user: self, skill_set: SkillSet.create)
+        end
+    end
+
+    def skill_training
+        prompt = TTY::Prompt.new
+            player_selection = prompt.select("What skill would you like to practice?") do |menu|
+                menu.choice name: "Sword Fighting", value: 1
+                menu.choice name: "Archery", value: 2
+                menu.choice name: "Horse Riding", value: 3
+                menu.choice name: "Survival", value: 4
+                menu.choice name: "Go Back", value: 5
+            end  
+            user_skills = self.user_skill_sets.last.skill_set
+            if player_selection == 1
+                user_skills.sword_fighting += 1
+                puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
+                sleep (2)
+                user_skills.save
+                self.skill_training
+            elsif player_selection == 2 
+                user_skills.archery += 1
+                puts "Your archery skill is now #{user_skills.sword_fighting}!"
+                sleep (2)
+                user_skills.save
+                self.skill_training
+            elsif player_selection == 3
+                user_skills.horse_riding += 1
+                puts "Your horse riding skill is now #{user_skills.sword_fighting}!"
+                sleep (2)
+                user_skills.save
+                self.skill_training
+            elsif player_selection == 4
+                user_skills.survival_skills += 1
+                puts "Your survival skill is now #{user_skills.sword_fighting}!"
+                sleep (2)
+                user_skills.save
+                self.skill_training
+            elsif player_selection == 5
+                House.welcome_home
+            end     
+    end
 end
