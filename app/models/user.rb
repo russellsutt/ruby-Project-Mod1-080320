@@ -41,19 +41,18 @@ class User < ActiveRecord::Base
 
     def skill_training
         prompt = TTY::Prompt.new
-            player_selection = prompt.select(TTY::Box.frame "What skill would you like to practice?") do |menu|
-                menu.choice name: "Sword Fighting", value: 1
-                menu.choice name: "Archery", value: 2
-                menu.choice name: "Horse Riding", value: 3
-                menu.choice name: "Survival", value: 4
-                menu.choice name: "Go Back", value: 5
+            player_selection = prompt.select("What skill would you like to practice?".colorize(:light_blue)) do |menu|
+                menu.choice name: "Sword Fighting".colorize(:light_blue), value: 1
+                menu.choice name: "Archery".colorize(:light_blue), value: 2
+                menu.choice name: "Horse Riding".colorize(:light_blue), value: 3
+                menu.choice name: "Survival".colorize(:light_blue), value: 4
+                menu.choice name: "Go Back".colorize(:light_yellow), value: 5
             end  
             user_skills = self.user_skill_sets.last.skill_set
             if player_selection == 1
                 user_skills.sword_fighting += 1
                 box = TTY::Box.success ("Your sword fighting skill is now #{user_skills.sword_fighting}!")
                 puts box
-                #puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
@@ -61,7 +60,6 @@ class User < ActiveRecord::Base
                 user_skills.archery += 1
                 box = TTY::Box.success ("Your archery skill is now #{user_skills.archery}")
                 puts box
-                #puts "Your archery skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
@@ -69,7 +67,6 @@ class User < ActiveRecord::Base
                 user_skills.horse_riding += 1
                 box = TTY::Box.success ("Your horse riding skill is now #{user_skills.horse_riding}!")
                 puts box
-                #puts "Your horse riding skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
@@ -77,7 +74,6 @@ class User < ActiveRecord::Base
                 user_skills.survival_skills += 1
                 box = TTY::Box.success ("Your survival skill is now #{user_skills.survival_skills}!")
                 puts box
-                #puts "Your survival skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training

@@ -12,6 +12,7 @@ User.destroy_all
 UserHouse.destroy_all
 UserSkillSet.destroy_all
 UserLibrary.destroy_all
+SkillSet.destroy_all
 
 library = Library.new(name: "The Winterfell Library")
 #skill_set = SkillSet.new(sword_fighting: 1, archery: 1, horse_riding: 1, survival_skills: 1, fatigue: 1)

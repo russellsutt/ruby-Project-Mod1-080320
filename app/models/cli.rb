@@ -1,6 +1,7 @@
 require 'pry'
 require 'tty-prompt'
 require "tty-box"
+require "colorize"
 
 class CLI
 
@@ -11,6 +12,7 @@ class CLI
         prompt = TTY::Prompt.new
         sleep (2)
         user.create_skill_set #if new user
+        binding.pry
         user.start_game
         house_selection = prompt.select("Please pick a house?") do |menu|
             menu.choice name: "House Stark of Winterfell", value: 1

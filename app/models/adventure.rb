@@ -1,6 +1,7 @@
 require 'pry'
 require 'tty-prompt'
 require 'tty-box'
+require 'colorize'
 
 class Adventure < ActiveRecord::Base
     belongs_to :house
@@ -9,13 +10,13 @@ class Adventure < ActiveRecord::Base
     has_many :users, through: :user_adventures
 
     def start_winterfell_adventure 
-        puts "Great lets go on an adventure! It's winter so beware of the cold..."
+        puts "Great lets go on an adventure! It's winter so beware of the cold...".colorize(:light_blue)
         prompt = TTY::Prompt.new
-        selection = prompt.select("#{UserAdventure.last.user.name}, where do you want to explore?") do |menu|
-            menu.choice name: "The Crypt of Winterfell", value: 1
-            menu.choice name: "Godswood of Winterfell", value: 2 #forest ??
-            menu.choice name: "The Castle Towers", value: 3, disabled: "(Off limits, the guards are there.)"
-            menu.choice name: "Go Back", value: 4 
+        selection = prompt.select("#{UserAdventure.last.user.name}, where do you want to explore?".colorize(:light_blue)) do |menu|
+            menu.choice name: "The Crypt of Winterfell".colorize(:light_blue), value: 1
+            menu.choice name: "Godswood of Winterfell".colorize(:light_blue), value: 2
+            menu.choice name: "The Castle Towers".colorize(:light_red), value: 3, disabled: "(Off limits, the guards are there.)"
+            menu.choice name: "Go Back".colorize(:light_yellow), value: 4 
         end
         #conditionals for 1,2,3
 
@@ -24,15 +25,15 @@ class Adventure < ActiveRecord::Base
             box = TTY::Box.frame(width: 30, height: 10, align: :center, border: :thick, padding: 2) do
                 "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
             end
-            puts box
+            puts box.colorize(:light_blue)
             sleep (2)
             self.find_torch
         elsif selection == 2
             #method for godswood
             box = TTY::Box.frame(width: 30, height: 10, align: :center, border: :thick, padding: 2) do
-                "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
+                "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here.".colorize(:light_blue)
             end
-            puts box
+            puts box.colorize(:light_blue)
             sleep (2)
             self.ghost_option
         elsif selection == 3
@@ -91,15 +92,40 @@ class Adventure < ActiveRecord::Base
     end
 
     #GODSWOOD METHODS BELOW
+    def ghost_image
+        puts"
+        /o``                                              
+        -o.``./..``                                       
+        /yh:```.``--...                                   
+        `-:--``.....-:.``                                 
+           .-..--.---.` `.`                               
+           `.::::.:.````  .` ``                           
+            ..:-:-:-.  ```````````````````````            
+             .`---::-` `..``````.```...````````...`       
+              ...-/::.`-:.`````.-.`````````.-```.--.``    
+               `.-:/:-----..``.:```````````.:`````.....   
+                `.--:-------.`--.`````````.:-`````-.-`.`  
+                  ..:::------`:-----..----::.`````---``-  
+                    `--:/-----:::::///:///:-:.````.-:```  
+                       -:----:........``.:+//::-..``:`.   
+                       .--.--:-           `.://::-.``.`   
+                        -:.-:/-             `::--::-.`..` 
+                        `-:.:/`             --:::/+:-::.-`
+                         .:.-:`              ``` /+:  .-`.
+                         .:..:                   /::   -..
+                      -.--:`.-                 --::- ``.`-
+                      `.-..--`                 `..`  .`.``     "
+    end
     def ghost_option
-        puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
+        self.ghost_image
+        puts "Look there is Ghost, Jon's direwolf. Jon must be close by!".colorize(:light_blue)
         prompt = TTY::Prompt.new
-        selection = prompt.select("Do you want to play with Ghost?") do |menu|
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, go back to adventures.", value: 2
+        selection = prompt.select("Do you want to play with Ghost?".colorize(:light_blue)) do |menu|
+            menu.choice name: "yes".colorize(:light_green), value: 1
+            menu.choice name: "no, go back to adventures.".colorize(:yellow), value: 2
         end
         if selection == 1
-            puts "Remember Ghost is very shy!"
+            puts "Remember Ghost is very shy!".colorize(:light_blue)
             sleep(2)
             self.play_with_ghost
         elsif selection == 2
@@ -110,18 +136,19 @@ class Adventure < ActiveRecord::Base
 
     def play_with_ghost
         prompt = TTY::Prompt.new
-        selection = prompt.select("Ghost looks hungy!") do |menu|
-            menu.choice name: "Feed Ghost some of your leftover pie.", value: 1
-            menu.choice name: "Pet Ghost.", value: 2
-            menu.choice name: "Leave Ghost alone, return to adventures.", value: 3
+        selection = prompt.select("Ghost looks hungy!".colorize(:light_blue)) do |menu|
+            menu.choice name: "Feed Ghost some of your leftover pie.".colorize(:light_blue), value: 1
+            menu.choice name: "Pet Ghost.".colorize(:light_blue), value: 2
+            menu.choice name: "Leave Ghost alone, return to adventures.".colorize(:light_yellow), value: 3
         end
         if selection == 1
-            puts "Wow, he ate that fast. He must of been hungry!"
+            puts "Wow, he ate that fast. He must of been hungry!".colorize(:light_green)
+            puts "Let's go find Jon now.".colorize(:light_blue)
             sleep (2)
             self.jon_option
             #return to castle or main adventure screen
         elsif selection == 2
-            puts "Ghost did not like that! Maybe we should leave him alone."
+            puts "Ghost did not like that! Maybe we should leave him alone.".colorize(:light_red)
             sleep (2)
             self.raise_fatigue_skill
             self.play_with_ghost
@@ -130,17 +157,40 @@ class Adventure < ActiveRecord::Base
             self.start_winterfell_adventure 
         end
     end
+    def sword_art
+        puts"                                                  
+        `.-`                          `-.`             
+       `.oo/`                        ./o+.`            
+        `-/-:-`              `     `::-/.`             
+          `-:/:.``./+`      `+:-``-//:.`               
+            `-/:+/- `          -++:/.                  
+             `:/oo:-         `-:oo::.                  
+           `:+` .:---.      .---:` `+:                 
+            ``    `----`  .----`    ``                 
+                    .--------`                         
+                      -:-.:.                           
+                    `--.-:.-.`                         
+                  `--.-.``--.-.`                       
+                `.-.-.`    `--.-.                      
+               .-`--`        `-..-.                    
+             `.`.-`            `-...`                  
+           `-...`                `-...                 
+          `:-.`                    `.--`               
+         `.`                          `.               
+                                               "
+    end
 
     def jon_option
-        puts "There is Jon practicing sword fighting!"
+        self.sword_art
+        puts "There he is practicing sword fighting!".colorize(:light_blue)
         prompt = TTY::Prompt.new
-        selection = prompt.select("Do you want to practice with Jon?") do |menu|
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, go back to adventures", value: 2
+        selection = prompt.select("Do you want to challege Jon?".colorize(:light_red)) do |menu|
+            menu.choice name: "yes".colorize(:light_green), value: 1
+            menu.choice name: "no, go back to adventures".colorize(:light_yellow), value: 2
         end
         if selection == 1
             # hey player's name, warning I am not going to go easy on you or somthing like that
-            puts "Hey #{UserAdventure.last.user.name}, fair warning I am not going to go easy on you..."
+            puts "Hey #{UserAdventure.last.user.name}, fair warning I'm not going easy on you...".colorize(:light_red)
             sleep(2)
             self.practice_with_jon
         elsif selection == 2
@@ -155,51 +205,52 @@ class Adventure < ActiveRecord::Base
         ##lower fatigue skill by 1
         ##raise sword fighting skill by 1
         prompt = TTY::Prompt.new
-        selection = prompt.select("Pick your move") do |menu|
-            menu.choice name: "Lunge", value: 1
-            menu.choice name: "Attack", value: 2
-            menu.choice name: "Roll", value: 3
-            menu.choice name: "Guard", value: 4
-            menu.choice name: "Claim defeat", value: 5
+        selection = prompt.select("Pick your move".colorize(:light_red)) do |menu|
+            menu.choice name: "Lunge".colorize(:light_red), value: 1
+            menu.choice name: "Attack".colorize(:light_red), value: 2
+            menu.choice name: "Roll".colorize(:light_red), value: 3
+            menu.choice name: "Guard".colorize(:light_red), value: 4
+            menu.choice name: "Claim defeat".colorize(:light_yellow), value: 5
         end
         #create an array? that user sequence must contain those moves to win?
         # return random sayings from Jon ?
         if selection == 1
-            puts "Yikes you missed!"
+            puts "Yikes you missed!".colorize(:light_red)
             sleep (2)
             self.raise_fatigue_skill
             self.practice_with_jon #to rerun jon method
         elsif selection == 2
-            puts "Wow, I did not see that coming. Great job #{UserAdventure.last.user.name}!"
+            puts "Wow, I did not see that coming. Great job #{UserAdventure.last.user.name}!".colorize(:light_green)
             sleep(2)
             self.item_from_jon#method here for jon to give user item
         elsif selection == 3
-            puts "John says, you almost got me!"
+            puts "You missed!".colorize(:light_red)
             sleep (2)
+            self.raise_fatigue_skill
             self.practice_with_jon #to rerun jon method
         elsif selection == 4
-            puts "John says, nice block!"
+            puts "John says, nice block!".colorize(:light_green)
             sleep (2)
             self.practice_with_jon #to rerun jon method
         elsif selection == 5
-            puts "That is too bad. Come back anytime." #or something like that
+            puts "That is too bad. Come back anytime.".colorize(:light_blue) #or something like that
             self.start_winterfell_adventure 
         end 
     end
 
     def item_from_jon
-        puts "A great fighter needs a great sword. Here take my spare."
+        puts "A great fighter needs a great sword. Here take my spare.".colorize(:light_green)
         sleep (2)
         raise_sword_fighting_skill
         self.visit_heart_tree_option
     end
 
     def visit_heart_tree_option
-        puts "Wow there is the heart tree!"
+        puts "Wow there is the heart tree!".colorize(:light_blue)
         prompt = TTY::Prompt.new
-        selection = prompt.select("Do you want to visit the tree?") do |menu|
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, go back to adventures", value: 2
+        selection = prompt.select("Do you want to visit the tree?".colorize(:light_blue)) do |menu|
+            menu.choice name: "yes".colorize(:light_green), value: 1
+            menu.choice name: "no, go back to adventures".colorize(:light_yellow), value: 2
         end
         if selection == 1
             self.interact_with_heart_tree
@@ -211,10 +262,10 @@ class Adventure < ActiveRecord::Base
 
     def interact_with_heart_tree
         prompt = TTY::Prompt.new
-        selection = prompt.select("What do you want to do?") do |menu|
-            menu.choice name: "Ask the heart tree for advice?", value: 1, disabled: "(The tree is sleeping. Shhhhh!)"
-            menu.choice name: "Take a nap under the heart tree?", value: 2
-            menu.choice name: "Go back to adventures.", value: 3
+        selection = prompt.select("What do you want to do?".colorize(:light_blue)) do |menu|
+            menu.choice name: "Ask the heart tree for advice?".colorize(:light_red), value: 1, disabled: "(The tree is sleeping. Shhhhh!)"
+            menu.choice name: "Take a nap under the heart tree?".colorize(:light_blue), value: 2
+            menu.choice name: "Go back to adventures.".colorize(:light_yellow), value: 3
         end
         if selection == 1
             self.talk_to_tree
@@ -222,7 +273,7 @@ class Adventure < ActiveRecord::Base
             #some kind of sleep greeting etc.
             sleep (4) #longer sleep feature because you are napping??
             self.lower_fatigue_skill
-            puts "It is getting dark. Time to return back to the castle."
+            puts "It is getting dark. Time to return back to the castle.".colorize(:light_blue)
             sleep (2)
             House.welcome_home
         elsif selection == 3
@@ -240,16 +291,16 @@ class Adventure < ActiveRecord::Base
     def find_torch
         #survival skills up 1
         prompt = TTY::Prompt.new
-        selection = prompt.select("Where do you want to look?") do |menu|
-            menu.choice name: "Next to the tomb of Lord Rickard Stark", value: 1
-            menu.choice name: "Behind the sprial steps", value: 2
+        selection = prompt.select("Where do you want to look?".colorize(:light_blue)) do |menu|
+            menu.choice name: "Next to the tomb of Lord Rickard Stark".colorize(:light_blue), value: 1
+            menu.choice name: "Behind the sprial steps".colorize(:light_blue), value: 2
         end
         if selection == 1
-            puts "Nothing there, just some spiders"
+            puts "Nothing there, just some spiders".colorize(:light_red)
             sleep (2)
             find_torch #rerun to find torch
         elsif selection == 2
-            puts "Ah-ha! There is the torch, now we have light!"
+            puts "Ah-ha! There is the torch, now we have light!".colorize(:light_green)
             sleep (2)
             self.raise_survival_skill
             # user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
@@ -260,16 +311,16 @@ class Adventure < ActiveRecord::Base
     end
 
     def arya_option
-        puts "What is that sound? Look it's Arya, she wants to play hide and seek!"
+        puts "What is that sound? Look it's Arya, she wants to play hide and seek!".colorize(:light_blue)
         prompt = TTY::Prompt.new
-        selection = prompt.select("Do you want to play?") do |menu|
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, go back to adventures", value: 2
+        selection = prompt.select("Do you want to play?".colorize(:light_blue)) do |menu|
+            menu.choice name: "yes".colorize(:light_green), value: 1
+            menu.choice name: "no, go back to adventures".colorize(:light_yellow), value: 2
         end
         if selection == 1
-            puts "Arya says if you find her you'll get a prize!"
+            puts "Arya says if you find her you'll get a prize!".colorize(:light_blue)
             sleep(2)
-            puts "Let's go!"
+            puts "Let's go!".colorize(:light_blue)
             sleep (2)
             self.find_arya
         elsif selection == 2
@@ -282,24 +333,24 @@ class Adventure < ActiveRecord::Base
     def find_arya
         ##lower fatigue skill by 1
         prompt = TTY::Prompt.new
-        selection = prompt.select("Where could Arya be?") do |menu|
-            menu.choice name: "Behind the pillar", value: 1
-            menu.choice name: "Behind the tomb of Lyanna Stark", value: 2
-            menu.choice name: "Behind the ironwood door", value: 3
+        selection = prompt.select("Where could Arya be?".colorize(:light_blue)) do |menu|
+            menu.choice name: "Behind the pillar".colorize(:light_blue), value: 1
+            menu.choice name: "Behind the tomb of Lyanna Stark".colorize(:light_blue), value: 2
+            menu.choice name: "Behind the ironwood door".colorize(:light_blue), value: 3
         end
         if selection == 1
-            puts "She is not there!"
+            puts "She is not there!".colorize(:light_red)
             sleep (2)
             self.find_arya #rerun to find arya
         elsif selection == 2
-            puts "No one is there!"
+            puts "No one is there!".colorize(:light_red)
             sleep (2)
             self.raise_fatigue_skill
             self.find_arya #rerun to find arya
         elsif selection == 3
-            puts "Hey #{UserAdventure.last.user.name}! You found me, nice job..."
+            puts "Hey #{UserAdventure.last.user.name}! You found me, nice job...".colorize(:light_green)
             sleep (2)
-            puts "But that was too easy. You must first answer my question to get your prize."
+            puts "But that was too easy. You must first answer my question to get your prize.".colorize(:light_blue)
             sleep (2)
             self.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
@@ -311,35 +362,35 @@ class Adventure < ActiveRecord::Base
         question_array = [
             #question_array.sample[:question] to get random question back
             #get quesions related to 
-            {"question": "Was Brandon Stark the first Stark?", "answer": "yes"},
-            {"question": "Are there any Stark swords in the Iron Throne?", "answer": "no"}
+            {"question": "Was Brandon Stark the first Stark?".colorize(:light_blue), "answer": "yes"},
+            {"question": "Are there any Stark swords in the Iron Throne?".colorize(:light_blue), "answer": "no"}
         ]
         chosen_question = question_array.sample[:question]
         selection = prompt.select(chosen_question) do |menu|
             prompt = TTY::Prompt.new
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no", value: 2
+            menu.choice name: "yes".colorize(:light_blue), value: 1
+            menu.choice name: "no".colorize(:light_blue), value: 2
         end
         if chosen_question == question_array.first[:question] && selection == 1
             #Correct!
             ##store item with user
-            puts "That is correct! Here is a golden dragon."
+            puts "That is correct! Here is a golden dragon.".colorize(:light_green)
             sleep (2)
             self.raise_intelligence_skill
-            puts "It's getting late, time to head back to the castle!"
+            puts "It's getting late, time to head back to the castle!".colorize(:light_blue)
             sleep (2)
             House.welcome_home
         elsif chosen_question == question_array.second[:question] && selection == 2
             #Correct!
             ##store item with user
-            puts "That is correct! Here is a golden dragon."
+            puts "That is correct! Here is a golden dragon.".colorize(:light_green)
             sleep (2)
             self.raise_intelligence_skill
-            puts "It's getting late, time to head back to the castle!"
+            puts "It's getting late, time to head back to the castle!".colorize(:light_blue)
             sleep (2)
             House.welcome_home
         else
-            puts "Sorry that is not correct."
+            puts "Sorry that is not correct.".colorize(:light_red)
             sleep (2)
             #try again method
             self.question_try_again
@@ -349,10 +400,10 @@ class Adventure < ActiveRecord::Base
 
     def question_try_again
         prompt = TTY::Prompt.new
-        selection = prompt.select("Would you like to try again?") do |menu|
+        selection = prompt.select("Would you like to try again?".colorize(:light_blue)) do |menu|
             prompt = TTY::Prompt.new
-            menu.choice name: "yes", value: 1
-            menu.choice name: "no, go back to adventures", value: 2
+            menu.choice name: "yes".colorize(:light_green), value: 1
+            menu.choice name: "no, go back to adventures".colorize(:light_yellow), value: 2
         end
         if selection == 1
            self.arya_question #to recall question method
