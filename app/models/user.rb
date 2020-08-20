@@ -1,5 +1,6 @@
 require 'tty-prompt'
 require 'pry'
+require 'tty-box'
 
 class User < ActiveRecord::Base
     has_many :user_skill_sets
@@ -40,7 +41,7 @@ class User < ActiveRecord::Base
 
     def skill_training
         prompt = TTY::Prompt.new
-            player_selection = prompt.select("What skill would you like to practice?") do |menu|
+            player_selection = prompt.select(TTY::Box.frame "What skill would you like to practice?") do |menu|
                 menu.choice name: "Sword Fighting", value: 1
                 menu.choice name: "Archery", value: 2
                 menu.choice name: "Horse Riding", value: 3
@@ -50,25 +51,33 @@ class User < ActiveRecord::Base
             user_skills = self.user_skill_sets.last.skill_set
             if player_selection == 1
                 user_skills.sword_fighting += 1
-                puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
+                box = TTY::Box.success ("Your sword fighting skill is now #{user_skills.sword_fighting}!")
+                puts box
+                #puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
             elsif player_selection == 2 
                 user_skills.archery += 1
-                puts "Your archery skill is now #{user_skills.sword_fighting}!"
+                box = TTY::Box.success ("Your archery skill is now #{user_skills.archery}")
+                puts box
+                #puts "Your archery skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
             elsif player_selection == 3
                 user_skills.horse_riding += 1
-                puts "Your horse riding skill is now #{user_skills.sword_fighting}!"
+                box = TTY::Box.success ("Your horse riding skill is now #{user_skills.horse_riding}!")
+                puts box
+                #puts "Your horse riding skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training
             elsif player_selection == 4
                 user_skills.survival_skills += 1
-                puts "Your survival skill is now #{user_skills.sword_fighting}!"
+                box = TTY::Box.success ("Your survival skill is now #{user_skills.survival_skills}!")
+                puts box
+                #puts "Your survival skill is now #{user_skills.sword_fighting}!"
                 sleep (2)
                 user_skills.save
                 self.skill_training

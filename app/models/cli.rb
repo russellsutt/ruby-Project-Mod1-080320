@@ -1,5 +1,6 @@
 require 'pry'
 require 'tty-prompt'
+require "tty-box"
 
 class CLI
 
@@ -26,10 +27,5 @@ class CLI
             puts "Take a look around and explore the castle!"
             House.welcome_home
         end
-
- 
     end
-
-
-    # User.last.user_houses.first.house
 end

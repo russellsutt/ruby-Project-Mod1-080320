@@ -1,5 +1,6 @@
 require 'pry'
 require 'tty-prompt'
+require 'tty-box'
 
 class Adventure < ActiveRecord::Base
     belongs_to :house
@@ -8,7 +9,7 @@ class Adventure < ActiveRecord::Base
     has_many :users, through: :user_adventures
 
     def start_winterfell_adventure 
-        puts "Great lets go on an adventure! It is winter so beware of the cold..."
+        puts "Great lets go on an adventure! It's winter so beware of the cold..."
         prompt = TTY::Prompt.new
         selection = prompt.select("#{UserAdventure.last.user.name}, where do you want to explore?") do |menu|
             menu.choice name: "The Crypt of Winterfell", value: 1
@@ -20,31 +21,36 @@ class Adventure < ActiveRecord::Base
 
         if selection == 1
             #method for crypt
-            puts "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
+            box = TTY::Box.frame(width: 30, height: 10, align: :center, border: :thick, padding: 2) do
+                "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
+            end
+            puts box
             sleep (2)
             self.find_torch
         elsif selection == 2
             #method for godswood
-            puts "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
+            box = TTY::Box.frame(width: 30, height: 10, align: :center, border: :thick, padding: 2) do
+                "Welcome to the Godswood of Winterfell! Who knows what you will stumble upon here."
+            end
+            puts box
             sleep (2)
             self.ghost_option
         elsif selection == 3
-            #method for tower
-            puts "Sorry, not available."
-            sleep (2)
+            #method for tower not available yet
             self.start_winterfell_adventure 
         elsif selection == 4
-            #go back to castle method
+            #go back to house method
             House.welcome_home
         end
     end
 
-#Skill methods
-    def lower_fatigue_skill
+    #Skill methods
+    def raise_fatigue_skill
         user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
         user_skills.fatigue += 1
         user_skills.save
-        puts "Oh no, your fatigue skill is now #{user_skills.fatigue}."
+        box = TTY::Box.error ("Oh no, your fatigue skill is now #{user_skills.fatigue}!")
+        puts box
         sleep (2)
     end
 
@@ -52,7 +58,8 @@ class Adventure < ActiveRecord::Base
         user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
         user_skills.intelligence += 1
         user_skills.save
-        puts "Your intelligence skill is now #{user_skills.intelligence}!"
+        box = TTY::Box.success ("Your intelligence skill is now #{user_skills.intelligence}!")
+        puts box
         sleep (2)
     end
 
@@ -60,51 +67,69 @@ class Adventure < ActiveRecord::Base
         user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
         user_skills.sword_fighting += 1
         user_skills.save
-        puts "Your sword fighting skill is now #{user_skills.sword_fighting}!"
+        box = TTY::Box.success ("Your sword fighting skill is now #{user_skills.sword_fighting}!")
+        puts box
         sleep (2)
     end
 
-
-#GODSWOOD METHODS BELOW
-def ghost_option
-    puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
-    prompt = TTY::Prompt.new
-    selection = prompt.select("Do you want to play with Ghost?") do |menu|
-        menu.choice name: "yes", value: 1
-        menu.choice name: "no, go back to adventures.", value: 2
-    end
-    if selection == 1
-        puts "Remember Ghost is very shy!"
+    def raise_survival_skill
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.survival_skills += 1
+        user_skills.save
+        box = TTY::Box.success("Your survival skill is now #{user_skills.survival_skills}!")
+        puts box
         sleep(2)
-        self.play_with_ghost
-    elsif selection == 2
-        #return to adventure screen
-        self.start_winterfell_adventure 
     end
-end
 
-def play_with_ghost
-    prompt = TTY::Prompt.new
-    selection = prompt.select("Ghost looks hungy!") do |menu|
-        menu.choice name: "Feed Ghost some of your leftover pie.", value: 1
-        menu.choice name: "Pet Ghost.", value: 2
-        menu.choice name: "Leave Ghost alone, return to adventures.", value: 3
-    end
-    if selection == 1
-        puts "Wow, he ate that fast. He must of been hungry!"
+    def lower_fatigue_skill
+        user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+        user_skills.fatigue -= 1
+        user_skills.save
+        box = TTY::Box.success("You must of slept well! Your fatigue skill is now #{user_skills.fatigue}.")
+        puts box
         sleep (2)
-        self.jon_option
-        #return to castle or main adventure screen
-    elsif selection == 2
-        puts "Ghost did not like that! Maybe we should leave him alone."
-        sleep (2)
-        self.lower_fatigue_skill
-        self.play_with_ghost
-    elsif selection ==3
-        #return to castle or main adventure screen
-        self.start_winterfell_adventure 
     end
-end
+
+    #GODSWOOD METHODS BELOW
+    def ghost_option
+        puts "Look there is Ghost, Jon's direwolf. Jon must be close by!"
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Do you want to play with Ghost?") do |menu|
+            menu.choice name: "yes", value: 1
+            menu.choice name: "no, go back to adventures.", value: 2
+        end
+        if selection == 1
+            puts "Remember Ghost is very shy!"
+            sleep(2)
+            self.play_with_ghost
+        elsif selection == 2
+            #return to adventure screen
+            self.start_winterfell_adventure 
+        end
+    end
+
+    def play_with_ghost
+        prompt = TTY::Prompt.new
+        selection = prompt.select("Ghost looks hungy!") do |menu|
+            menu.choice name: "Feed Ghost some of your leftover pie.", value: 1
+            menu.choice name: "Pet Ghost.", value: 2
+            menu.choice name: "Leave Ghost alone, return to adventures.", value: 3
+        end
+        if selection == 1
+            puts "Wow, he ate that fast. He must of been hungry!"
+            sleep (2)
+            self.jon_option
+            #return to castle or main adventure screen
+        elsif selection == 2
+            puts "Ghost did not like that! Maybe we should leave him alone."
+            sleep (2)
+            self.raise_fatigue_skill
+            self.play_with_ghost
+        elsif selection ==3
+            #return to castle or main adventure screen
+            self.start_winterfell_adventure 
+        end
+    end
 
     def jon_option
         puts "There is Jon practicing sword fighting!"
@@ -142,7 +167,7 @@ end
         if selection == 1
             puts "Yikes you missed!"
             sleep (2)
-            self.lower_fatigue_skill
+            self.raise_fatigue_skill
             self.practice_with_jon #to rerun jon method
         elsif selection == 2
             puts "Wow, I did not see that coming. Great job #{UserAdventure.last.user.name}!"
@@ -196,10 +221,7 @@ end
         elsif selection == 2
             #some kind of sleep greeting etc.
             sleep (4) #longer sleep feature because you are napping??
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.fatigue -= 1
-            puts "Your fatigue skill is now #{user_skills.fatigue}."
-            sleep (2)
+            self.lower_fatigue_skill
             puts "It is getting dark. Time to return back to the castle."
             sleep (2)
             House.welcome_home
@@ -212,7 +234,9 @@ end
         #return random advice
 
     end
- #CRYPT METHODS BELOW   
+
+
+    #CRYPT METHODS BELOW   
     def find_torch
         #survival skills up 1
         prompt = TTY::Prompt.new
@@ -227,10 +251,10 @@ end
         elsif selection == 2
             puts "Ah-ha! There is the torch, now we have light!"
             sleep (2)
-            user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
-            user_skills.survival_skills += 1
-            puts "Your survival skill is now #{user_skills.survival_skills}!"
-            sleep (2)
+            self.raise_survival_skill
+            # user_skills = UserAdventure.last.user.user_skill_sets.last.skill_set
+            # user_skills.survival_skills += 1
+            # puts "Your survival skill is now #{user_skills.survival_skills}!"
             self.arya_option
         end
     end
@@ -270,12 +294,12 @@ end
         elsif selection == 2
             puts "No one is there!"
             sleep (2)
-            self.lower_fatigue_skill
+            self.raise_fatigue_skill
             self.find_arya #rerun to find arya
         elsif selection == 3
             puts "Hey #{UserAdventure.last.user.name}! You found me, nice job..."
             sleep (2)
-            puts "But that was too easy. You must first answer my question to get the prize."
+            puts "But that was too easy. You must first answer my question to get your prize."
             sleep (2)
             self.arya_question##build another method => answer secret question if right give this item to user
             sleep (2)
@@ -302,7 +326,7 @@ end
             puts "That is correct! Here is a golden dragon."
             sleep (2)
             self.raise_intelligence_skill
-            puts "It is now time to go back to the castle!"
+            puts "It's getting late, time to head back to the castle!"
             sleep (2)
             House.welcome_home
         elsif chosen_question == question_array.second[:question] && selection == 2
@@ -311,7 +335,7 @@ end
             puts "That is correct! Here is a golden dragon."
             sleep (2)
             self.raise_intelligence_skill
-            puts "It is now time to go back to the castle!"
+            puts "It's getting late, time to head back to the castle!"
             sleep (2)
             House.welcome_home
         else
