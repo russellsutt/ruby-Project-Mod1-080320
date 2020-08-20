@@ -2,6 +2,9 @@ require 'pry'
 require 'tty-prompt'
 require 'tty-box'
 require 'colorize'
+require 'rmagick'
+require 'catpix'
+# require_relative '../assets/image/adventure'
 
 class Adventure < ActiveRecord::Base
     belongs_to :house
@@ -23,6 +26,7 @@ class Adventure < ActiveRecord::Base
         if selection == 1
             #method for crypt
             box = TTY::Box.frame(width: 30, height: 10, align: :center, border: :thick, padding: 2) do
+                Catpixel.catpix_high_res("assets/image/adventure/crypt.jpg")
                 "Welcome to the Crypt of Winterfell! It is dark you will need to find a torch to light."
             end
             puts box.colorize(:light_blue)
@@ -92,32 +96,8 @@ class Adventure < ActiveRecord::Base
     end
 
     #GODSWOOD METHODS BELOW
-    def ghost_image
-        puts"
-        /o``                                              
-        -o.``./..``                                       
-        /yh:```.``--...                                   
-        `-:--``.....-:.``                                 
-           .-..--.---.` `.`                               
-           `.::::.:.````  .` ``                           
-            ..:-:-:-.  ```````````````````````            
-             .`---::-` `..``````.```...````````...`       
-              ...-/::.`-:.`````.-.`````````.-```.--.``    
-               `.-:/:-----..``.:```````````.:`````.....   
-                `.--:-------.`--.`````````.:-`````-.-`.`  
-                  ..:::------`:-----..----::.`````---``-  
-                    `--:/-----:::::///:///:-:.````.-:```  
-                       -:----:........``.:+//::-..``:`.   
-                       .--.--:-           `.://::-.``.`   
-                        -:.-:/-             `::--::-.`..` 
-                        `-:.:/`             --:::/+:-::.-`
-                         .:.-:`              ``` /+:  .-`.
-                         .:..:                   /::   -..
-                      -.--:`.-                 --::- ``.`-
-                      `.-..--`                 `..`  .`.``     "
-    end
     def ghost_option
-        self.ghost_image
+        Catpixel.catpix_high_res("assets/image/adventure/ghost.jpg")
         puts "Look there is Ghost, Jon's direwolf. Jon must be close by!".colorize(:light_blue)
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to play with Ghost?".colorize(:light_blue)) do |menu|
@@ -157,31 +137,9 @@ class Adventure < ActiveRecord::Base
             self.start_winterfell_adventure 
         end
     end
-    def sword_art
-        puts"                                                  
-        `.-`                          `-.`             
-       `.oo/`                        ./o+.`            
-        `-/-:-`              `     `::-/.`             
-          `-:/:.``./+`      `+:-``-//:.`               
-            `-/:+/- `          -++:/.                  
-             `:/oo:-         `-:oo::.                  
-           `:+` .:---.      .---:` `+:                 
-            ``    `----`  .----`    ``                 
-                    .--------`                         
-                      -:-.:.                           
-                    `--.-:.-.`                         
-                  `--.-.``--.-.`                       
-                `.-.-.`    `--.-.                      
-               .-`--`        `-..-.                    
-             `.`.-`            `-...`                  
-           `-...`                `-...                 
-          `:-.`                    `.--`               
-         `.`                          `.               
-                                               "
-    end
-
+    
     def jon_option
-        self.sword_art
+        Catpixel.catpix_high_res("assets/image/adventure/sword.jpg")
         puts "There he is practicing sword fighting!".colorize(:light_blue)
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to challege Jon?".colorize(:light_red)) do |menu|
@@ -246,6 +204,7 @@ class Adventure < ActiveRecord::Base
     end
 
     def visit_heart_tree_option
+        Catpixel.catpix_high_res("assets/image/adventure/tree.jpg")
         puts "Wow there is the heart tree!".colorize(:light_blue)
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to visit the tree?".colorize(:light_blue)) do |menu|
