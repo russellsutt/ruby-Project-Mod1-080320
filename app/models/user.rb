@@ -48,13 +48,13 @@ class User < ActiveRecord::Base
                 menu.choice name: "Survival".colorize(:light_blue), value: 4
                 menu.choice name: "Go Back".colorize(:light_yellow), value: 5
             end  
-            user_skills = self.user_skill_sets.last.skill_set
+            user_skills = self.user_skill_sets.last.skill_set #gets users skills
             if player_selection == 1
                 user_skills.sword_fighting += 1
                 box = TTY::Box.success ("Your sword fighting skill is now #{user_skills.sword_fighting}!")
                 puts box
                 sleep (2)
-                user_skills.save
+                user_skills.save #saves skill update
                 self.skill_training
             elsif player_selection == 2 
                 user_skills.archery += 1

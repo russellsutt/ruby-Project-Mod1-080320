@@ -98,7 +98,7 @@ class Adventure < ActiveRecord::Base
     #GODSWOOD METHODS BELOW
     def ghost_option
         Catpixel.catpix_high_res("assets/image/adventure/ghost.jpg")
-        puts "Look there is Ghost, Jon's direwolf. Jon must be close by!".colorize(:light_blue)
+        puts "Look there is Ghost, Jon Snow's direwolf. Jon must be close by!".colorize(:light_blue)
         prompt = TTY::Prompt.new
         selection = prompt.select("Do you want to play with Ghost?".colorize(:light_blue)) do |menu|
             menu.choice name: "yes".colorize(:light_green), value: 1
@@ -123,7 +123,7 @@ class Adventure < ActiveRecord::Base
         end
         if selection == 1
             puts "Wow, he ate that fast. He must of been hungry!".colorize(:light_green)
-            puts "Let's go find Jon now.".colorize(:light_blue)
+            puts "Let's go find Jon Snow now.".colorize(:light_blue)
             sleep (2)
             self.jon_option
             #return to castle or main adventure screen
@@ -232,9 +232,9 @@ class Adventure < ActiveRecord::Base
             #some kind of sleep greeting etc.
             sleep (4) #longer sleep feature because you are napping??
             self.lower_fatigue_skill
-            puts "It is getting dark. Time to return back to the castle.".colorize(:light_blue)
+            puts "It is getting dark. Time to head back!".colorize(:light_blue)
             sleep (2)
-            House.welcome_home
+            self.start_winterfell_adventure
         elsif selection == 3
             self.start_winterfell_adventure 
         end
@@ -242,7 +242,6 @@ class Adventure < ActiveRecord::Base
 
     def talk_to_tree
         #return random advice
-
     end
 
 
@@ -336,18 +335,18 @@ class Adventure < ActiveRecord::Base
             puts "That is correct! Here is a golden dragon.".colorize(:light_green)
             sleep (2)
             self.raise_intelligence_skill
-            puts "It's getting late, time to head back to the castle!".colorize(:light_blue)
+            puts "It's getting late, time to head back!".colorize(:light_blue)
             sleep (2)
-            House.welcome_home
+            self.start_winterfell_adventure
         elsif chosen_question == question_array.second[:question] && selection == 2
             #Correct!
             ##store item with user
             puts "That is correct! Here is a golden dragon.".colorize(:light_green)
             sleep (2)
             self.raise_intelligence_skill
-            puts "It's getting late, time to head back to the castle!".colorize(:light_blue)
+            puts "It's getting late, time to head back!".colorize(:light_blue)
             sleep (2)
-            House.welcome_home
+            self.start_winterfell_adventure
         else
             puts "Sorry that is not correct.".colorize(:light_red)
             sleep (2)
