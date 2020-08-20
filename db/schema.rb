@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 12) do
+ActiveRecord::Schema.define(version: 13) do
 
   create_table "adventures", force: :cascade do |t|
     t.string "name"
@@ -70,6 +70,11 @@ ActiveRecord::Schema.define(version: 12) do
   create_table "user_libraries", force: :cascade do |t|
     t.integer "user_id"
     t.integer "library_id"
+  end
+
+  create_table "user_rooms", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "room_id"
   end
 
   create_table "user_skill_sets", force: :cascade do |t|

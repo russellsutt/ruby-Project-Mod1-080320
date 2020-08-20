@@ -1,5 +1,7 @@
 require 'tty-prompt'
 require 'pry'
+require 'colorize'
+require 'catpix'
 require 'tty-box'
 
 class User < ActiveRecord::Base
@@ -14,23 +16,37 @@ class User < ActiveRecord::Base
 
     def self.login
         prompt = TTY::Prompt.new
-        name = prompt.ask("Please login.  What is your character name?")
-        password = prompt.mask("What is your password?")
-        gender = prompt.ask("Are you a boy or a girl?")
+        name = prompt.ask("Please login.  What is your character's first name?".colorize(:light_yellow))
+        password = prompt.mask("What is your password?".colorize(:light_yellow))
+        gender = prompt.ask("Are you a Boy or a Girl?".colorize(:light_yellow))
         User.find_or_create_by(name: name, password: password, gender: gender)
     end
 
     def start_game
         prompt = TTY::Prompt.new
-        selection = prompt.select("Please pick an option?") do |menu|
-            menu.choice name: "Start a new Game", value: 1
-            menu.choice name: "Continue Game", value: 2, disabled: "(No saved available.)"
-            menu.choice name: "Quit", value: 3, disabled: "(You can't quit now!)"
+        selection = prompt.select("What would you like to do?") do |menu|
+            menu.choice name: "Start Game".colorize(:green), value: 1
+            menu.choice name: "Stop Music".colorize(:light_yellow), value: 2
+            menu.choice name: "Quit".colorize(:red), value: 3
+        end
+        if selection == 3
+            box = TTY::Box.frame(width: 30, height: 8, align: :center, border: :thick, padding: 2) do "Thank you for playing! Sam L. & Russ S." end
+                puts box.colorize(:red)
+                pid = fork{ exec 'killall', 'afplay' }
+                sleep(3)
+                exit!
+        elsif selection == 2
+            pid = fork{ exec 'killall', 'afplay' }
+            CLI.start_game
+        else selection == 1
+            return true
         end
     end
 
-    def view_profile
-        puts "Your character name is #{self.name}"
+
+
+    def who_am_i
+        puts "Your character name is #{self.name} Stark of House Stark.".colorize(:light_blue)
     end
 
     def create_skill_set
@@ -78,7 +94,7 @@ class User < ActiveRecord::Base
                 user_skills.save
                 self.skill_training
             elsif player_selection == 5
-                House.welcome_home
+                House.first.welcome_home
             end     
     end
 end
