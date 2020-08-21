@@ -18,6 +18,7 @@ class CLI
         if selection == 3
             box = TTY::Box.frame(width: 30, height: 8, align: :center, border: :thick, padding: 2) do "Thank you for playing!  Sam L. & Russ S." end
                 puts box.colorize(:red)
+                pid = fork{ exec 'killall', 'afplay' }
                 sleep(3)
                 exit!
         elsif selection == 2
@@ -29,7 +30,7 @@ class CLI
     end
 
 
-    pid = fork{ exec 'afplay', 'assets/music/got_main_theme_extended.mp3'}
+    pid = fork{ exec 'afplay', 'assets/music/got_main_theme_very_extended.mp3'}
     # pid = fork{ exec ‘killall’, “afplay” }
     def start
         prompt = TTY::Prompt.new
