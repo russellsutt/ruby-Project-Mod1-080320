@@ -1,6 +1,7 @@
 require 'rest-client'
 require 'json'
 require 'pry'
+require 'game_of_thrones_api'
 
 House.destroy_all
 Room.destroy_all
