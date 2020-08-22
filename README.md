@@ -4,7 +4,7 @@ A Game of Thrones CLI role-playing game. Enjoy!
 - Installation Instructions:
     - Clone down
     - Run bundle install
-    - Run ruby run.rb
+    - Run rake 
     - Have fun!
 
 ***Please note: To stop music, look for stop music function at the main menu.***
