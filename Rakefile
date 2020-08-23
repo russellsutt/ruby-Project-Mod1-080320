@@ -2,10 +2,14 @@ require_relative './config/environment'
 require 'sinatra/activerecord/rake'
 require 'pry'
 
-desc "Start our app console"
+task :default => ["run"]
 
-  task :console do
-    Pry.start
-  end
-  
-  #0
+desc "Run the game"
+task :run do |t|
+  CLI.new.start
+end
+
+desc "Start our app console"
+task :console do
+  Pry.start
+end
